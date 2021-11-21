@@ -40,6 +40,8 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #mybatis-plus配置控制台打印完整带参数sql语句
 
 # 修改日志输出级别，输出mp的sql语句
 logging:
