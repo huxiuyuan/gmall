@@ -11,8 +11,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 
 @Service("skuService")
 public class SkuServiceImpl extends ServiceImpl<SkuMapper, SkuEntity> implements SkuService {
@@ -29,14 +27,4 @@ public class SkuServiceImpl extends ServiceImpl<SkuMapper, SkuEntity> implements
 
         return new PageResultVo(page);
     }
-
-    @Override
-    public List<SkuEntity> querySkuBySpuID(Long sid) {
-        QueryWrapper<SkuEntity> queryWrapper = new QueryWrapper<>();
-
-        queryWrapper.eq("spu_id",sid);
-
-        return skuMapper.selectList(queryWrapper);
-    }
-
 }

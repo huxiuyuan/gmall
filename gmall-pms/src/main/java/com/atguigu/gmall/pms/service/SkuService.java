@@ -17,12 +17,5 @@ import java.util.List;
 public interface SkuService extends IService<SkuEntity> {
 
     PageResultVo queryPage(PageParamVo paramVo);
-
-    /**
-     * 查询一个spu的所有sku
-     * @param sid
-     * @return
-     */
-    List<SkuEntity> querySkuBySpuID(Long sid);
 }
 
