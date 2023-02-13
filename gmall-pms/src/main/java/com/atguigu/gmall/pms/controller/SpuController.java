@@ -5,7 +5,6 @@ import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.pms.entity.SpuEntity;
 import com.atguigu.gmall.pms.service.SpuService;
-import com.atguigu.gmall.pms.vo.SpuVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +27,6 @@ public class SpuController {
     @Autowired
     private SpuService spuService;
 
-    /**
-     * 按照分类id分页查询商品列表
-     * @param paramVo 带条件查询分页工具类
-     * @param cid
-     * @return
-     */
-    @GetMapping("/category/{categoryId}")
-    @ApiOperation("spu列表查询")
-    public ResponseVo<PageResultVo> querySpuByCidAndIdOrName(PageParamVo paramVo,@PathVariable("categoryId") Long cid){
-        PageResultVo pageResultVo = spuService.querySpuByCidAndIdOrName(paramVo, cid);
-
-        return ResponseVo.ok(pageResultVo);
-    }
     /**
      * 列表
      */
@@ -69,8 +55,8 @@ public class SpuController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody SpuVo spu){
-		spuService.bigSava(spu);
+    public ResponseVo<Object> save(@RequestBody SpuEntity spu){
+		spuService.save(spu);
 
         return ResponseVo.ok();
     }

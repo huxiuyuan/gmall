@@ -28,18 +28,6 @@ public class SkuController {
     private SkuService skuService;
 
     /**
-     * 查询一个spu的所有sku
-     * @param sid
-     * @return
-     */
-    @GetMapping("/spu/{spuId}")
-    @ApiOperation("查询sku")
-    public ResponseVo<List<SkuEntity>> querySkuBySpuID(@PathVariable("spuId") Long sid){
-        List<SkuEntity> skuList = skuService.querySkuBySpuID(sid);
-
-        return ResponseVo.ok(skuList);
-    }
-    /**
      * 列表
      */
     @GetMapping
