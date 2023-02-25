@@ -16,6 +16,8 @@ public class CorsConfig {
 
     @Bean
     public CorsWebFilter corsWebFilter() {
+
+        // 初始化一个cors配置类对象
         CorsConfiguration configuration = new CorsConfiguration();
         // 允许哪些域名跨域访问：*-代表允许所有域名跨域访问，但是不能携带cookie
         configuration.addAllowedOrigin("http://manager.gmall.com");
@@ -27,7 +29,9 @@ public class CorsConfig {
         // 允许携带任意头信息
         configuration.addAllowedHeader("*");
 
+        // 初始化cors配置源
         UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
+        // 注册cors配置
         configurationSource.registerCorsConfiguration("/**",configuration);
         return new CorsWebFilter(configurationSource);
     }
