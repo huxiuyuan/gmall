@@ -28,6 +28,19 @@ public class SkuController {
     private SkuService skuService;
 
     /**
+     * 根据spuId查询sku
+     *
+     * @param spuId
+     * @return
+     */
+    @GetMapping("/spu/{spuId}")
+    @ApiOperation("根据spuId查询sku")
+    public ResponseVo<List<SkuEntity>> querySkuBySpuId(@PathVariable("spuId") Long spuId) {
+        List<SkuEntity> skuEntities = skuService.querySkuBySpuId(spuId);
+        return ResponseVo.ok(skuEntities);
+    }
+
+    /**
      * 列表
      */
     @GetMapping
