@@ -15,5 +15,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface SpuService extends IService<SpuEntity> {
 
     PageResultVo queryPage(PageParamVo paramVo);
+
+    /**
+     * 根据分类id分页查询商品列表
+     */
+    PageResultVo queryCategoryByCategoryId(PageParamVo paramVo, Long categoryId);
 }
 
