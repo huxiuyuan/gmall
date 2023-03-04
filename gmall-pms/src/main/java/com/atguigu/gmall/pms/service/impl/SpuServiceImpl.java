@@ -43,7 +43,6 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         // 获取搜索搜索查询关键字
         String key = paramVo.getKey();
         if (StringUtils.isNotBlank(key)) {
-            com.baomidou.mybatisplus.core.toolkit.StringUtils.checkValNotNull()
             queryWrapper.and(e -> e.eq(SpuEntity::getId, key).or().like(SpuEntity::getName, key));
         }
         IPage<SpuEntity> page = this.page(paramVo.getPage(), queryWrapper);
