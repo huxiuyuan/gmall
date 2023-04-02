@@ -1,8 +1,5 @@
-package com.atguigu.gmall.pms.vo;
+package com.atguigu.gmall.sms.vo;
 
-import com.atguigu.gmall.pms.entity.SkuAttrValueEntity;
-import com.atguigu.gmall.pms.entity.SkuEntity;
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -10,12 +7,16 @@ import java.util.List;
 
 /**
  * @author huXiuYuan
- * @Description：sku扩展对象
- * @date 2023/3/26 23:18
+ * @Description：
+ * @date 2023/4/1 17:13
  */
 @Data
-@ApiModel("sku扩展对象")
-public class SkuVo extends SkuEntity {
+public class SkuSalesVo {
+
+    /**
+     * skuID
+     */
+    private Long skuId;
 
     // 积分信息
     /**
@@ -58,14 +59,4 @@ public class SkuVo extends SkuEntity {
      * 是否叠加其他优惠[0-不可叠加，1-可叠加]
      */
     private Integer ladderAddOther;
-
-    /**
-     * 图片信息
-     */
-    private List<String> images;
-
-    /**
-     * sku的销售属性
-     */
-    private List<SkuAttrValueEntity> saleAttrs;
 }

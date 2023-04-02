@@ -3,6 +3,7 @@ package com.atguigu.gmall.pms.service;
 import com.atguigu.gmall.common.bean.PageParamVo;
 import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.pms.entity.SpuEntity;
+import com.atguigu.gmall.pms.vo.SpuVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -20,5 +21,10 @@ public interface SpuService extends IService<SpuEntity> {
      * 根据分类id分页查询商品列表
      */
     PageResultVo queryCategoryByCategoryId(PageParamVo paramVo, Long categoryId);
+
+    /**
+     * spu大保存
+     */
+    void bigSave(SpuVo spu);
 }
 

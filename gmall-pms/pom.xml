@@ -21,6 +21,12 @@
             <artifactId>gmall-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <!--sms 接口工程-->
+        <dependency>
+            <groupId>com.atguigu</groupId>
+            <artifactId>gmall-sms-interface</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!--web 启动器-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
