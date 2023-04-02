@@ -5,6 +5,7 @@ import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.sms.entity.SkuBoundsEntity;
 import com.atguigu.gmall.sms.service.SkuBoundsService;
+import com.atguigu.gmall.sms.vo.SkuSalesVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,19 @@ public class SkuBoundsController {
 
     @Autowired
     private SkuBoundsService skuBoundsService;
+
+    /**
+     * 保存sku营销信息
+     *
+     * @param skuSalesVo sku营销信息
+     * @return
+     */
+    @PostMapping("saveSkuSales")
+    @ApiOperation("保存sku营销信息")
+    public ResponseVo saveSkuSales(@RequestBody SkuSalesVo skuSalesVo) {
+        this.skuBoundsService.saveSkuSales(skuSalesVo);
+        return ResponseVo.ok();
+    }
 
     /**
      * 列表

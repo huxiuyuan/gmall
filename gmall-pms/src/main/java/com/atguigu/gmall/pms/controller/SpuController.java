@@ -5,6 +5,7 @@ import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.pms.entity.SpuEntity;
 import com.atguigu.gmall.pms.service.SpuService;
+import com.atguigu.gmall.pms.vo.SpuVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,12 +65,12 @@ public class SpuController {
     }
 
     /**
-     * 保存
+     * spu保存 - 大保存
      */
     @PostMapping
-    @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody SpuEntity spu){
-		spuService.save(spu);
+    @ApiOperation("spu保存 - 大保存")
+    public ResponseVo<Object> save(@RequestBody SpuVo spu){
+		spuService.bigSave(spu);
 
         return ResponseVo.ok();
     }
