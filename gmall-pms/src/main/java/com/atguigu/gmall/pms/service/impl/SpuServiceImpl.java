@@ -92,12 +92,35 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     public void bigSave(SpuVo spu) {
         // 1.保存spu相关信息
         // 1.1 保存pms_spu表信息
+        Long spuId = this.saveSpuInfo(spu);
+        // 1.2 保存pms_spu_desc表信息
+        this.saveSpuDesc(spu, spuId);
+        // 1.3 保存pms_spu_attr_value表信息
+        this.saveSpuAttrValue(spu, spuId);
+        // 2.保存sku相关信息
+        this.saveSkuInfo(spu, spuId);
+    }
+
+    /**
+     * 保存spu基本信息并返回spuId
+     *
+     * @param spu
+     * @return spuId
+     */
+    private Long saveSpuInfo(SpuVo spu) {
         spu.setCreateTime(new Date());
         spu.setUpdateTime(spu.getCreateTime());
-        save(spu);
+        this.save(spu);
+        return spu.getId();
+    }
 
-        Long spuId = spu.getId();
-        // 1.2 保存pms_spu_desc表信息
+    /**
+     * 保存spu图片信息
+     *
+     * @param spu
+     * @param spuId
+     */
+    private void saveSpuDesc(SpuVo spu, Long spuId) {
         if (CollectionUtils.isNotEmpty(spu.getSpuImages())) {
             List<SpuDescEntity> spuDescEntities = spu.getSpuImages().stream().map(e -> {
                 SpuDescEntity spuDescEntity = new SpuDescEntity();
@@ -107,7 +130,15 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
             }).collect(Collectors.toList());
             this.spuDescService.saveBatch(spuDescEntities);
         }
-        // 1.3 保存pms_spu_attr_value表信息
+    }
+
+    /**
+     * 保存spu规格参数值信息
+     *
+     * @param spu
+     * @param spuId
+     */
+    private void saveSpuAttrValue(SpuVo spu, Long spuId) {
         if (CollectionUtils.isNotEmpty(spu.getBaseAttrs())) {
             List<SpuAttrValueEntity> spuAttrValueEntities = spu.getBaseAttrs().stream().map(e -> {
                 SpuAttrValueEntity spuAttrValueEntity = new SpuAttrValueEntity();
@@ -117,7 +148,15 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
             }).collect(Collectors.toList());
             this.spuAttrValueService.saveBatch(spuAttrValueEntities);
         }
-        // 2.保存sku相关信息
+    }
+
+    /**
+     * 保存sku信息
+     *
+     * @param spu
+     * @param spuId
+     */
+    private void saveSkuInfo(SpuVo spu, Long spuId) {
         if (CollectionUtils.isNotEmpty(spu.getSkus())) {
             spu.getSkus().forEach(sku -> {
                 sku.setSpuId(spuId);
