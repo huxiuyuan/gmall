@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 订单项信息
  *
- * @author Guan FuQing
+ * @author huxiuyuan
  * @email moumouguan@gmail.com
  * @date 2021-11-21 05:34:50
  */
@@ -32,7 +32,7 @@ public class OrderItemController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> queryOrderItemByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> queryOrderItemByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = orderItemService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -44,8 +44,8 @@ public class OrderItemController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<OrderItemEntity> queryOrderItemById(@PathVariable("id") Long id){
-		OrderItemEntity orderItem = orderItemService.getById(id);
+    public ResponseVo<OrderItemEntity> queryOrderItemById(@PathVariable("id") Long id) {
+        OrderItemEntity orderItem = orderItemService.getById(id);
 
         return ResponseVo.ok(orderItem);
     }
@@ -55,8 +55,8 @@ public class OrderItemController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody OrderItemEntity orderItem){
-		orderItemService.save(orderItem);
+    public ResponseVo<Object> save(@RequestBody OrderItemEntity orderItem) {
+        orderItemService.save(orderItem);
 
         return ResponseVo.ok();
     }
@@ -66,8 +66,8 @@ public class OrderItemController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody OrderItemEntity orderItem){
-		orderItemService.updateById(orderItem);
+    public ResponseVo update(@RequestBody OrderItemEntity orderItem) {
+        orderItemService.updateById(orderItem);
 
         return ResponseVo.ok();
     }
@@ -77,8 +77,8 @@ public class OrderItemController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		orderItemService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        orderItemService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

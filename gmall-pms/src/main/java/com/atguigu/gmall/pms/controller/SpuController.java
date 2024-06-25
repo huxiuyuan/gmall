@@ -8,17 +8,19 @@ import com.atguigu.gmall.pms.service.SpuService;
 import com.atguigu.gmall.pms.vo.SpuVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * spu信息
  *
- * @author huxiuyuan
+ * @author huXiuYuan
  * @email a811437621@gmail.com
- * @date 2021-09-28 16:01:55
+ * @date 2021-11-21 05:23:24
  */
 @Api(tags = "spu信息 管理")
 @RestController
@@ -29,15 +31,18 @@ public class SpuController {
     private SpuService spuService;
 
     /**
-     * 根据分类id分页查询商品列表
+     * 商品列表 - spu查询按钮
      *
-     * @param categoryId
-     * @return
+     * @param cid
+     * @param paramVo
+     * @return ResponseVo<PageResultVo>
      */
     @GetMapping("/category/{categoryId}")
-    @ApiOperation("根据分类id分页查询商品列表")
-    public ResponseVo<PageResultVo> queryCategoryByCategoryId(PageParamVo paramVo, @PathVariable("categoryId") Long categoryId) {
-        PageResultVo pageResultVo = this.spuService.queryCategoryByCategoryId(paramVo, categoryId);
+    @ApiOperation("spu分页查询")
+    public ResponseVo<PageResultVo> queryCategorysByCid(@PathVariable("categoryId") Long cid,
+                                                        PageParamVo paramVo) {
+        PageResultVo pageResultVo = spuService.queryCategorysByCid(cid, paramVo);
+
         return ResponseVo.ok(pageResultVo);
     }
 
@@ -46,10 +51,30 @@ public class SpuController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> querySpuByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> querySpuByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = spuService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
+    }
+
+    /**
+     * 为搜索服务单独提供的分页查询
+     *
+     * @param paramVo
+     * @return
+     */
+    @PostMapping("page")
+    @ApiOperation("分页查询")
+    public ResponseVo<List<SpuEntity>> querySpuByPageJson(@RequestBody PageParamVo paramVo) {
+        PageResultVo pageResultVo = spuService.queryPage(paramVo);
+
+        List<SpuEntity> spuEntities = pageResultVo.getList().stream().map(a -> {
+            SpuEntity spuEntity = new SpuEntity();
+            BeanUtils.copyProperties(a, spuEntity);
+            return spuEntity;
+        }).collect(Collectors.toList());
+
+        return ResponseVo.ok(spuEntities);
     }
 
 
@@ -58,19 +83,22 @@ public class SpuController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id){
-		SpuEntity spu = spuService.getById(id);
+    public ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id) {
+        SpuEntity spu = spuService.getById(id);
 
         return ResponseVo.ok(spu);
     }
 
     /**
-     * spu保存 - 大保存
+     * spu新增之大保存(spu,sku,营销信息 九张表)
+     *
+     * @param spu
+     * @return ResponseVo<Object>
      */
     @PostMapping
-    @ApiOperation("spu保存 - 大保存")
-    public ResponseVo<Object> save(@RequestBody SpuVo spu){
-		spuService.bigSave(spu);
+    @ApiOperation("保存")
+    public ResponseVo<Object> save(@RequestBody SpuVo spu) {
+        spuService.bigSave(spu);
 
         return ResponseVo.ok();
     }
@@ -80,8 +108,8 @@ public class SpuController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody SpuEntity spu){
-		spuService.updateById(spu);
+    public ResponseVo update(@RequestBody SpuEntity spu) {
+        spuService.updateById(spu);
 
         return ResponseVo.ok();
     }
@@ -91,8 +119,8 @@ public class SpuController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		spuService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        spuService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

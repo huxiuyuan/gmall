@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 退款信息
  *
- * @author Guan FuQing
+ * @author huxiuyuan
  * @email moumouguan@gmail.com
  * @date 2021-11-21 05:34:50
  */
@@ -32,7 +32,7 @@ public class RefundInfoController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> queryRefundInfoByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> queryRefundInfoByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = refundInfoService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -44,8 +44,8 @@ public class RefundInfoController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<RefundInfoEntity> queryRefundInfoById(@PathVariable("id") Long id){
-		RefundInfoEntity refundInfo = refundInfoService.getById(id);
+    public ResponseVo<RefundInfoEntity> queryRefundInfoById(@PathVariable("id") Long id) {
+        RefundInfoEntity refundInfo = refundInfoService.getById(id);
 
         return ResponseVo.ok(refundInfo);
     }
@@ -55,8 +55,8 @@ public class RefundInfoController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody RefundInfoEntity refundInfo){
-		refundInfoService.save(refundInfo);
+    public ResponseVo<Object> save(@RequestBody RefundInfoEntity refundInfo) {
+        refundInfoService.save(refundInfo);
 
         return ResponseVo.ok();
     }
@@ -66,8 +66,8 @@ public class RefundInfoController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody RefundInfoEntity refundInfo){
-		refundInfoService.updateById(refundInfo);
+    public ResponseVo update(@RequestBody RefundInfoEntity refundInfo) {
+        refundInfoService.updateById(refundInfo);
 
         return ResponseVo.ok();
     }
@@ -77,8 +77,8 @@ public class RefundInfoController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		refundInfoService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        refundInfoService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

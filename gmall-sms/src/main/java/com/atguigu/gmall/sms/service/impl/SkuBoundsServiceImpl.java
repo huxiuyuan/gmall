@@ -17,12 +17,16 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 
 @Service("skuBoundsService")
 public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBoundsEntity> implements SkuBoundsService {
+
+    @Autowired
+    private SkuBoundsMapper skuBoundsMapper;
 
     @Autowired
     private SkuFullReductionMapper skuFullReductionMapper;
@@ -46,6 +50,7 @@ public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBounds
      * @param skuSalesVo
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveSkuSales(SkuSalesVo skuSalesVo) {
         // 3.保存营销信息
         // 3.1 保存sms_sku_bounds表信息
@@ -55,7 +60,7 @@ public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBounds
         if (CollectionUtils.isNotEmpty(work) && work.size() == 4) {
             skuBoundsEntity.setWork(work.get(3) * 8 + work.get(2) * 4 + work.get(1) * 2 + work.get(0));
         }
-        this.save(skuBoundsEntity);
+        this.skuBoundsMapper.insert(skuBoundsEntity);
 
         // 3.2 保存sms_sku_full_reduction表信息
         SkuFullReductionEntity skuFullReductionEntity = new SkuFullReductionEntity();

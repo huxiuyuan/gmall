@@ -15,9 +15,9 @@ import java.util.List;
 /**
  * 商品评价回复关系
  *
- * @author huxiuyuan
- * @email a811437621@gmail.com
- * @date 2021-09-28 16:01:55
+ * @author huXiuYuan
+ * @email h811437621@gmail.com
+ * @date 2021-11-21 05:23:24
  */
 @Api(tags = "商品评价回复关系 管理")
 @RestController
@@ -32,7 +32,7 @@ public class CommentReplayController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> queryCommentReplayByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> queryCommentReplayByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = commentReplayService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -44,8 +44,8 @@ public class CommentReplayController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<CommentReplayEntity> queryCommentReplayById(@PathVariable("id") Long id){
-		CommentReplayEntity commentReplay = commentReplayService.getById(id);
+    public ResponseVo<CommentReplayEntity> queryCommentReplayById(@PathVariable("id") Long id) {
+        CommentReplayEntity commentReplay = commentReplayService.getById(id);
 
         return ResponseVo.ok(commentReplay);
     }
@@ -55,8 +55,8 @@ public class CommentReplayController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody CommentReplayEntity commentReplay){
-		commentReplayService.save(commentReplay);
+    public ResponseVo<Object> save(@RequestBody CommentReplayEntity commentReplay) {
+        commentReplayService.save(commentReplay);
 
         return ResponseVo.ok();
     }
@@ -66,8 +66,8 @@ public class CommentReplayController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody CommentReplayEntity commentReplay){
-		commentReplayService.updateById(commentReplay);
+    public ResponseVo update(@RequestBody CommentReplayEntity commentReplay) {
+        commentReplayService.updateById(commentReplay);
 
         return ResponseVo.ok();
     }
@@ -77,8 +77,8 @@ public class CommentReplayController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		commentReplayService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        commentReplayService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

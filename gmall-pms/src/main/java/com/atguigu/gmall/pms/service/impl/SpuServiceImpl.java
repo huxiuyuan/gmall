@@ -2,27 +2,28 @@ package com.atguigu.gmall.pms.service.impl;
 
 import com.atguigu.gmall.common.bean.PageParamVo;
 import com.atguigu.gmall.common.bean.PageResultVo;
-import com.atguigu.gmall.pms.entity.SkuImagesEntity;
-import com.atguigu.gmall.pms.entity.SpuAttrValueEntity;
-import com.atguigu.gmall.pms.entity.SpuDescEntity;
-import com.atguigu.gmall.pms.entity.SpuEntity;
-import com.atguigu.gmall.pms.feignclient.GmallSmsClient;
+import com.atguigu.gmall.pms.entity.*;
+import com.atguigu.gmall.pms.feign.GmallSmsClient;
 import com.atguigu.gmall.pms.mapper.SkuMapper;
+import com.atguigu.gmall.pms.mapper.SpuDescMapper;
 import com.atguigu.gmall.pms.mapper.SpuMapper;
-import com.atguigu.gmall.pms.service.*;
+import com.atguigu.gmall.pms.service.SkuAttrValueService;
+import com.atguigu.gmall.pms.service.SkuImagesService;
+import com.atguigu.gmall.pms.service.SpuAttrValueService;
+import com.atguigu.gmall.pms.service.SpuService;
+import com.atguigu.gmall.pms.vo.SkuVo;
+import com.atguigu.gmall.pms.vo.SpuAttrValueVo;
 import com.atguigu.gmall.pms.vo.SpuVo;
-import com.atguigu.gmall.sms.vo.SkuSalesVo;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.atguigu.gmall.sms.vo.SkuSaleVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -33,7 +34,10 @@ import java.util.stream.Collectors;
 public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements SpuService {
 
     @Autowired
-    private SpuDescService spuDescService;
+    private SpuMapper spuMapper;
+
+    @Autowired
+    private SpuDescMapper spuDescMapper;
 
     @Autowired
     private SpuAttrValueService spuAttrValueService;
@@ -61,137 +65,126 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     }
 
     /**
-     * 根据分类id分页查询商品列表
+     * 商品列表 - spu查询按钮
      *
-     * @param categoryId
-     * @return
+     * @param cid
+     * @param paramVo
+     * @return ResponseVo<PageResultVo>
      */
     @Override
-    public PageResultVo queryCategoryByCategoryId(PageParamVo paramVo, Long categoryId) {
-        LambdaQueryWrapper<SpuEntity> queryWrapper = Wrappers.lambdaQuery();
-        // categoryId不为0查全部
-        if (categoryId != 0) {
-            queryWrapper.eq(SpuEntity::getCategoryId, categoryId);
-        }
-        // 获取搜索搜索查询关键字
+    public PageResultVo queryCategorysByCid(Long cid, PageParamVo paramVo) {
+        QueryWrapper<SpuEntity> query = new QueryWrapper<>();
         String key = paramVo.getKey();
-        if (StringUtils.isNotBlank(key)) {
-            queryWrapper.and(e -> e.eq(SpuEntity::getId, key).or().like(SpuEntity::getName, key));
+        if (StringUtils.isNotBlank(paramVo.getKey())) {
+            query.eq("category_id", cid).and(t -> t.eq("id", key).or().like("name", key));
         }
-        IPage<SpuEntity> page = this.page(paramVo.getPage(), queryWrapper);
+        IPage<SpuEntity> page = spuMapper.selectPage(paramVo.getPage(), query);
+
         return new PageResultVo(page);
     }
 
     /**
-     * spu大保存
+     * spu新增之大保存
      *
      * @param spu
+     * @return ResponseVo<Object>
      */
+    @GlobalTransactional
     @Override
-    @Transactional(rollbackFor = Throwable.class)
     public void bigSave(SpuVo spu) {
-        // 1.保存spu相关信息
-        // 1.1 保存pms_spu表信息
-        Long spuId = this.saveSpuInfo(spu);
-        // 1.2 保存pms_spu_desc表信息
-        this.saveSpuDesc(spu, spuId);
-        // 1.3 保存pms_spu_attr_value表信息
-        this.saveSpuAttrValue(spu, spuId);
-        // 2.保存sku相关信息
-        this.saveSkuInfo(spu, spuId);
+        // 1.保存spu相关信息 三张表
+        // 1.1 保存pms_spu
+        Long spuId = saveSpuInfo(spu);
+
+        // 1.2 保存pms_spu_desc
+        saveSpuDesc(spu, spuId);
+
+        // 1.3 保存pms_spu_attr_value
+        saveBaseAttr(spu, spuId);
+
+//        int i = 1/0;
+
+        // 2.保存sku相关信息 三张表
+        saveSkuInfo(spu, spuId);
+
+//        int o = 1/0;
     }
 
-    /**
-     * 保存spu基本信息并返回spuId
-     *
-     * @param spu
-     * @return spuId
-     */
-    private Long saveSpuInfo(SpuVo spu) {
-        spu.setCreateTime(new Date());
-        spu.setUpdateTime(spu.getCreateTime());
-        this.save(spu);
-        return spu.getId();
-    }
-
-    /**
-     * 保存spu图片信息
-     *
-     * @param spu
-     * @param spuId
-     */
-    private void saveSpuDesc(SpuVo spu, Long spuId) {
-        if (CollectionUtils.isNotEmpty(spu.getSpuImages())) {
-            List<SpuDescEntity> spuDescEntities = spu.getSpuImages().stream().map(e -> {
-                SpuDescEntity spuDescEntity = new SpuDescEntity();
-                spuDescEntity.setSpuId(spuId);
-                spuDescEntity.setDecript(e);
-                return spuDescEntity;
-            }).collect(Collectors.toList());
-            this.spuDescService.saveBatch(spuDescEntities);
-        }
-    }
-
-    /**
-     * 保存spu规格参数值信息
-     *
-     * @param spu
-     * @param spuId
-     */
-    private void saveSpuAttrValue(SpuVo spu, Long spuId) {
-        if (CollectionUtils.isNotEmpty(spu.getBaseAttrs())) {
-            List<SpuAttrValueEntity> spuAttrValueEntities = spu.getBaseAttrs().stream().map(e -> {
-                SpuAttrValueEntity spuAttrValueEntity = new SpuAttrValueEntity();
-                BeanUtils.copyProperties(e, spuAttrValueEntity);
-                spuAttrValueEntity.setSpuId(spuId);
-                return spuAttrValueEntity;
-            }).collect(Collectors.toList());
-            this.spuAttrValueService.saveBatch(spuAttrValueEntities);
-        }
-    }
-
-    /**
-     * 保存sku信息
-     *
-     * @param spu
-     * @param spuId
-     */
     private void saveSkuInfo(SpuVo spu, Long spuId) {
-        if (CollectionUtils.isNotEmpty(spu.getSkus())) {
-            spu.getSkus().forEach(sku -> {
+        List<SkuVo> skus = spu.getSkus();
+        if (!CollectionUtils.isEmpty(skus)) {
+            skus.forEach(sku -> {
+                // 2.1 保存pms_sku
                 sku.setSpuId(spuId);
                 sku.setBrandId(spu.getBrandId());
                 sku.setCategoryId(spu.getCategoryId());
-                if (CollectionUtils.isNotEmpty(sku.getImages())) {
-                    sku.setDefaultImage(StringUtils.isNotBlank(sku.getDefaultImage()) ? sku.getDefaultImage() : sku.getImages().get(0));
+                // sku图片列表
+                List<String> images = sku.getImages();
+                if (!CollectionUtils.isEmpty(images)) {
+                    sku.setDefaultImage(StringUtils.isBlank(sku.getDefaultImage()) ? images.get(0) : sku.getDefaultImage());
                 }
-                // 2.1 保存pms_sku表信息
-                this.skuMapper.insert(sku);
+                skuMapper.insert(sku);
                 Long skuId = sku.getId();
-                // 2.2 保存pms_sku_images表信息
-                if (CollectionUtils.isNotEmpty(sku.getImages())) {
-                    List<SkuImagesEntity> skuImagesEntities = sku.getImages().stream().map(image -> {
+
+                // 2.2 保存pms_sku_images
+                if (!CollectionUtils.isEmpty(images)) {
+                    skuImagesService.saveBatch(images.stream().map(image -> {
                         SkuImagesEntity skuImagesEntity = new SkuImagesEntity();
                         skuImagesEntity.setSkuId(skuId);
                         skuImagesEntity.setUrl(image);
                         skuImagesEntity.setDefaultStatus(StringUtils.equals(image, sku.getDefaultImage()) ? 1 : 0);
+
                         return skuImagesEntity;
-                    }).collect(Collectors.toList());
-                    this.skuImagesService.saveBatch(skuImagesEntities);
-                }
-                // 2.3 保存pms_sku_attr_value表信息
-                if (CollectionUtils.isNotEmpty(sku.getSaleAttrs())) {
-                    sku.getSaleAttrs().forEach(attr -> attr.setSkuId(skuId));
-                    this.skuAttrValueService.saveBatch(sku.getSaleAttrs());
+                    }).collect(Collectors.toList()));
                 }
 
-                // 3.保存营销信息
-                SkuSalesVo skuSalesVo = new SkuSalesVo();
-                BeanUtils.copyProperties(sku, skuSalesVo);
-                skuSalesVo.setSkuId(skuId);
-                this.gmallSmsClient.saveSkuSales(skuSalesVo);
+                // 2.3 保存pms_sku_attr_value
+                List<SkuAttrValueEntity> saleAttrs = sku.getSaleAttrs();
+                if (!CollectionUtils.isEmpty(saleAttrs)) {
+                    saleAttrs.forEach(skuAttrValueEntity -> {
+                        skuAttrValueEntity.setSkuId(skuId);
+                    });
+                }
+                skuAttrValueService.saveBatch(saleAttrs);
+
+                // 3.保存sku营销信息 三张表
+                SkuSaleVo skuSaleVo = new SkuSaleVo();
+                BeanUtils.copyProperties(sku, skuSaleVo);
+                skuSaleVo.setSkuId(skuId);
+                gmallSmsClient.saveSales(skuSaleVo);
             });
         }
     }
 
+    private void saveBaseAttr(SpuVo spu, Long spuId) {
+        List<SpuAttrValueVo> baseAttrs = spu.getBaseAttrs();
+        if (!CollectionUtils.isEmpty(baseAttrs)) {
+            spuAttrValueService.saveBatch(baseAttrs.stream().map(spuAttrValueVo -> {
+                SpuAttrValueEntity spuAttrValueEntity = new SpuAttrValueEntity();
+                // 此处应先copy再赋值，不然会覆盖掉
+                BeanUtils.copyProperties(spuAttrValueVo, spuAttrValueEntity);
+                spuAttrValueEntity.setSpuId(spuId);
+
+                return spuAttrValueEntity;
+            }).collect(Collectors.toList()));
+        }
+    }
+
+    private void saveSpuDesc(SpuVo spu, Long spuId) {
+        List<String> imagesList = spu.getSpuImages();
+        if (!CollectionUtils.isEmpty(imagesList)) {
+            SpuDescEntity spuDescEntity = new SpuDescEntity();
+            spuDescEntity.setSpuId(spuId);
+            spuDescEntity.setDecript(StringUtils.join(imagesList, ","));
+            spuDescMapper.insert(spuDescEntity);
+        }
+    }
+
+    private Long saveSpuInfo(SpuVo spu) {
+        spu.setCreateTime(new Date());
+        spu.setUpdateTime(spu.getCreateTime());
+        spuMapper.insert(spu);
+        Long spuId = spu.getId();
+        return spuId;
+    }
 }

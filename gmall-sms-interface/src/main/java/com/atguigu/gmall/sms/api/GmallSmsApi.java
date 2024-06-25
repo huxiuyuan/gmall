@@ -13,7 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 public interface GmallSmsApi {
 
+    /**
+     * 保存sku营销信息
+     *
+     * @param skuSalesVo sku营销信息实体
+     * @return
+     */
     @PostMapping("/sms/skubounds/saveSkuSales")
     @ApiOperation("保存sku营销信息")
-    ResponseVo saveSkuSales(@RequestBody SkuSalesVo skuSalesVo);
+    ResponseVo<Void> saveSkuSales(@RequestBody SkuSalesVo skuSalesVo);
 }

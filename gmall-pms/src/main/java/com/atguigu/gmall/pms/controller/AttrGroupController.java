@@ -15,9 +15,9 @@ import java.util.List;
 /**
  * 属性分组
  *
- * @author huxiuyuan
- * @email a811437621@gmail.com
- * @date 2021-09-28 16:01:55
+ * @author huXiuYuan
+ * @email h811437621@gmail.com
+ * @date 2021-11-21 05:23:24
  */
 @Api(tags = "属性分组 管理")
 @RestController
@@ -28,37 +28,39 @@ public class AttrGroupController {
     private AttrGroupService attrGroupService;
 
     /**
-     * 查询分类下的组及规格参数
-     * @param cid
-     * @return
+     * 查询分类下的分组和分组下的具体属性
+     *
+     * @param cId
+     * @return ResponseVo<List < AttrGroupEntity>>
      */
-    @GetMapping("/withattrs/{catId}")
-    @ApiOperation("查询组及规格参数")
-    public ResponseVo<List<AttrGroupEntity>> queryAttrGroupAndAttrByCid(@PathVariable("catId") Long cid){
-        List<AttrGroupEntity> entities = attrGroupService.queryAttrGroupAndAttrByCid(cid);
-
-        return ResponseVo.ok(entities);
-    }
-
-    /**
-     * 查询规格参数分组
-     * @param cid
-     * @return ResponseVo<List<AttrGroupEntity>>
-     */
-    @GetMapping("/category/{cid}")
-    @ApiOperation("规格参数分组")
-    public ResponseVo<List<AttrGroupEntity>> selectAttrGroupByCid(@PathVariable("cid") Long cid){
-
-        List<AttrGroupEntity> attrGroupEntities = attrGroupService.selectAttrGroupByCid(cid);
+    @GetMapping("withattrs/{catId}")
+    @ApiOperation("查询分类下的组及规格参数")
+    public ResponseVo<List<AttrGroupEntity>> queryAttrGroupsByCId(@PathVariable("catId") Long cId) {
+        List<AttrGroupEntity> attrGroupEntities = attrGroupService.queryAttrGroupsByCId(cId);
 
         return ResponseVo.ok(attrGroupEntities);
     }
+
+    /**
+     * 属性维护 - 三级分类的规格参数分组查询
+     *
+     * @param cId
+     * @return ResponseVo<List < AttrGroupEntity>>
+     */
+    @GetMapping("category/{cid}")
+    @ApiOperation("树状图属性分组查询")
+    public ResponseVo<List<AttrGroupEntity>> queryAttrGroupByCId(@PathVariable("cid") Long cId) {
+        List<AttrGroupEntity> attrGroupEntities = attrGroupService.queryAttrGroupByCId(cId);
+
+        return ResponseVo.ok(attrGroupEntities);
+    }
+
     /**
      * 列表
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> queryAttrGroupByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> queryAttrGroupByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = attrGroupService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -70,8 +72,8 @@ public class AttrGroupController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<AttrGroupEntity> queryAttrGroupById(@PathVariable("id") Long id){
-		AttrGroupEntity attrGroup = attrGroupService.getById(id);
+    public ResponseVo<AttrGroupEntity> queryAttrGroupById(@PathVariable("id") Long id) {
+        AttrGroupEntity attrGroup = attrGroupService.getById(id);
 
         return ResponseVo.ok(attrGroup);
     }
@@ -81,8 +83,8 @@ public class AttrGroupController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody AttrGroupEntity attrGroup){
-		attrGroupService.save(attrGroup);
+    public ResponseVo<Object> save(@RequestBody AttrGroupEntity attrGroup) {
+        attrGroupService.save(attrGroup);
 
         return ResponseVo.ok();
     }
@@ -92,8 +94,8 @@ public class AttrGroupController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody AttrGroupEntity attrGroup){
-		attrGroupService.updateById(attrGroup);
+    public ResponseVo update(@RequestBody AttrGroupEntity attrGroup) {
+        attrGroupService.updateById(attrGroup);
 
         return ResponseVo.ok();
     }
@@ -103,8 +105,8 @@ public class AttrGroupController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		attrGroupService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        attrGroupService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

@@ -20,28 +20,29 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
     @Autowired
     private CategoryMapper categoryMapper;
 
-    /**
-     * 分类查询
-     */
-    @Override
-    public List<CategoryEntity> selectCategoryByPid(Long pid) {
-        QueryWrapper<CategoryEntity> wrapper = new QueryWrapper<>();
-
-        if (pid != -1){
-            wrapper.eq("parent_id",pid);
-        }
-        return categoryMapper.selectList(wrapper);
-//        return this.list(wrapper);
-    }
-
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
         IPage<CategoryEntity> page = this.page(
                 paramVo.getPage(),
-                new QueryWrapper<>()
+                new QueryWrapper<CategoryEntity>()
         );
 
         return new PageResultVo(page);
+    }
+
+    /**
+     * 分类维护 - 树状图查询
+     *
+     * @param pId
+     * @return ResponseVo<List < CategoryEntity>>
+     */
+    @Override
+    public List<CategoryEntity> queryCategoryByParentId(Long pId) {
+        QueryWrapper<CategoryEntity> query = new QueryWrapper<>();
+        if (pId != -1) {
+            query.eq("parent_id", pId);
+        }
+        return categoryMapper.selectList(query);
     }
 
 }

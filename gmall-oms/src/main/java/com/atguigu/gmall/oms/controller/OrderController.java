@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 订单
  *
- * @author Guan FuQing
+ * @author huxiuyuan
  * @email moumouguan@gmail.com
  * @date 2021-11-21 05:34:50
  */
@@ -33,7 +33,7 @@ public class OrderController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> queryOrderByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> queryOrderByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = orderService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -45,8 +45,8 @@ public class OrderController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<OrderEntity> queryOrderById(@PathVariable("id") Long id){
-		OrderEntity order = orderService.getById(id);
+    public ResponseVo<OrderEntity> queryOrderById(@PathVariable("id") Long id) {
+        OrderEntity order = orderService.getById(id);
 
         return ResponseVo.ok(order);
     }
@@ -56,8 +56,8 @@ public class OrderController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody OrderEntity order){
-		orderService.save(order);
+    public ResponseVo<Object> save(@RequestBody OrderEntity order) {
+        orderService.save(order);
 
         return ResponseVo.ok();
     }
@@ -67,8 +67,8 @@ public class OrderController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody OrderEntity order){
-		orderService.updateById(order);
+    public ResponseVo update(@RequestBody OrderEntity order) {
+        orderService.updateById(order);
 
         return ResponseVo.ok();
     }
@@ -78,8 +78,8 @@ public class OrderController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		orderService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        orderService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

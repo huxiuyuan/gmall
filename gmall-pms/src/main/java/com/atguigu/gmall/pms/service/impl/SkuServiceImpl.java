@@ -7,7 +7,6 @@ import com.atguigu.gmall.pms.mapper.SkuMapper;
 import com.atguigu.gmall.pms.service.SkuService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,13 +31,16 @@ public class SkuServiceImpl extends ServiceImpl<SkuMapper, SkuEntity> implements
     }
 
     /**
-     * 根据spuId查询sku
+     * 库存管理 - 商品库存 - 库存维护
      *
-     * @param spuId
-     * @return
+     * @param sid
+     * @return ResponseVo<List < SkuEntity>>
      */
     @Override
-    public List<SkuEntity> querySkuBySpuId(Long spuId) {
-        return this.list(Wrappers.<SkuEntity>lambdaQuery().eq(SkuEntity::getSpuId, spuId));
+    public List<SkuEntity> querySkusBySpuId(Long sid) {
+        QueryWrapper<SkuEntity> query = new QueryWrapper<>();
+        query.eq("spu_id", sid);
+        return skuMapper.selectList(query);
     }
+
 }

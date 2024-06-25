@@ -15,9 +15,9 @@ import java.util.List;
 /**
  * spu属性值
  *
- * @author huxiuyuan
- * @email a811437621@gmail.com
- * @date 2021-09-28 16:01:55
+ * @author huXiuYuan
+ * @email h811437621@gmail.com
+ * @date 2021-11-21 05:23:24
  */
 @Api(tags = "spu属性值 管理")
 @RestController
@@ -28,11 +28,27 @@ public class SpuAttrValueController {
     private SpuAttrValueService spuAttrValueService;
 
     /**
+     * 数据导入第七步：根据 cid 和 spuId 查询基本类型的检索属性及值
+     *
+     * @param cid
+     * @param spuId
+     */
+    @GetMapping("category/{cid}")
+    public ResponseVo<List<SpuAttrValueEntity>> querySearchAttrValueByCidAndSpuId(
+            @PathVariable("cid") Long cid,
+            @RequestParam("spuId") Long spuId) {
+
+        List<SpuAttrValueEntity> spuAttrValueEntities = spuAttrValueService.querySearchAttrValueByCidAndSpuId(cid, spuId);
+
+        return ResponseVo.ok(spuAttrValueEntities);
+    }
+
+    /**
      * 列表
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> querySpuAttrValueByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> querySpuAttrValueByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = spuAttrValueService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -44,8 +60,8 @@ public class SpuAttrValueController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<SpuAttrValueEntity> querySpuAttrValueById(@PathVariable("id") Long id){
-		SpuAttrValueEntity spuAttrValue = spuAttrValueService.getById(id);
+    public ResponseVo<SpuAttrValueEntity> querySpuAttrValueById(@PathVariable("id") Long id) {
+        SpuAttrValueEntity spuAttrValue = spuAttrValueService.getById(id);
 
         return ResponseVo.ok(spuAttrValue);
     }
@@ -55,8 +71,8 @@ public class SpuAttrValueController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody SpuAttrValueEntity spuAttrValue){
-		spuAttrValueService.save(spuAttrValue);
+    public ResponseVo<Object> save(@RequestBody SpuAttrValueEntity spuAttrValue) {
+        spuAttrValueService.save(spuAttrValue);
 
         return ResponseVo.ok();
     }
@@ -66,8 +82,8 @@ public class SpuAttrValueController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody SpuAttrValueEntity spuAttrValue){
-		spuAttrValueService.updateById(spuAttrValue);
+    public ResponseVo update(@RequestBody SpuAttrValueEntity spuAttrValue) {
+        spuAttrValueService.updateById(spuAttrValue);
 
         return ResponseVo.ok();
     }
@@ -77,8 +93,8 @@ public class SpuAttrValueController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		spuAttrValueService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        spuAttrValueService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

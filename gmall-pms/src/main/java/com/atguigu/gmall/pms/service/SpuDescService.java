@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * spu信息介绍
  *
  * @author huxiuyuan
- * @email a811437621@gmail.com
- * @date 2021-09-28 16:01:55
+ * @email moumouguan@gmail.com
+ * @date 2021-11-21 05:23:24
  */
 public interface SpuDescService extends IService<SpuDescEntity> {
 

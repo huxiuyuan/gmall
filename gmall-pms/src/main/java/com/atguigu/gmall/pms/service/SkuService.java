@@ -11,16 +11,19 @@ import java.util.List;
  * sku信息
  *
  * @author huxiuyuan
- * @email a811437621@gmail.com
- * @date 2021-09-28 16:01:55
+ * @email moumouguan@gmail.com
+ * @date 2021-11-21 05:23:24
  */
 public interface SkuService extends IService<SkuEntity> {
 
     PageResultVo queryPage(PageParamVo paramVo);
 
     /**
-     * 根据spuId查询sku
+     * 库存管理 - 商品库存 - 库存维护
+     *
+     * @param sid
+     * @return ResponseVo<List < SkuEntity>>
      */
-    List<SkuEntity> querySkuBySpuId(Long spuId);
+    List<SkuEntity> querySkusBySpuId(Long sid);
 }
 

@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 订单退货申请
  *
- * @author Guan FuQing
+ * @author huxiuyuan
  * @email moumouguan@gmail.com
  * @date 2021-11-21 05:34:50
  */
@@ -32,7 +32,7 @@ public class OrderReturnApplyController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> queryOrderReturnApplyByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> queryOrderReturnApplyByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = orderReturnApplyService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -44,8 +44,8 @@ public class OrderReturnApplyController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<OrderReturnApplyEntity> queryOrderReturnApplyById(@PathVariable("id") Long id){
-		OrderReturnApplyEntity orderReturnApply = orderReturnApplyService.getById(id);
+    public ResponseVo<OrderReturnApplyEntity> queryOrderReturnApplyById(@PathVariable("id") Long id) {
+        OrderReturnApplyEntity orderReturnApply = orderReturnApplyService.getById(id);
 
         return ResponseVo.ok(orderReturnApply);
     }
@@ -55,8 +55,8 @@ public class OrderReturnApplyController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody OrderReturnApplyEntity orderReturnApply){
-		orderReturnApplyService.save(orderReturnApply);
+    public ResponseVo<Object> save(@RequestBody OrderReturnApplyEntity orderReturnApply) {
+        orderReturnApplyService.save(orderReturnApply);
 
         return ResponseVo.ok();
     }
@@ -66,8 +66,8 @@ public class OrderReturnApplyController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody OrderReturnApplyEntity orderReturnApply){
-		orderReturnApplyService.updateById(orderReturnApply);
+    public ResponseVo update(@RequestBody OrderReturnApplyEntity orderReturnApply) {
+        orderReturnApplyService.updateById(orderReturnApply);
 
         return ResponseVo.ok();
     }
@@ -77,8 +77,8 @@ public class OrderReturnApplyController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		orderReturnApplyService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        orderReturnApplyService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

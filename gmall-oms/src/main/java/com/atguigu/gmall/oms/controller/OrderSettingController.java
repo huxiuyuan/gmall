@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 订单配置信息
  *
- * @author Guan FuQing
+ * @author huxiuyuan
  * @email moumouguan@gmail.com
  * @date 2021-11-21 05:34:50
  */
@@ -32,7 +32,7 @@ public class OrderSettingController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> queryOrderSettingByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> queryOrderSettingByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = orderSettingService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -44,8 +44,8 @@ public class OrderSettingController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<OrderSettingEntity> queryOrderSettingById(@PathVariable("id") Long id){
-		OrderSettingEntity orderSetting = orderSettingService.getById(id);
+    public ResponseVo<OrderSettingEntity> queryOrderSettingById(@PathVariable("id") Long id) {
+        OrderSettingEntity orderSetting = orderSettingService.getById(id);
 
         return ResponseVo.ok(orderSetting);
     }
@@ -55,8 +55,8 @@ public class OrderSettingController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody OrderSettingEntity orderSetting){
-		orderSettingService.save(orderSetting);
+    public ResponseVo<Object> save(@RequestBody OrderSettingEntity orderSetting) {
+        orderSettingService.save(orderSetting);
 
         return ResponseVo.ok();
     }
@@ -66,8 +66,8 @@ public class OrderSettingController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody OrderSettingEntity orderSetting){
-		orderSettingService.updateById(orderSetting);
+    public ResponseVo update(@RequestBody OrderSettingEntity orderSetting) {
+        orderSettingService.updateById(orderSetting);
 
         return ResponseVo.ok();
     }
@@ -77,8 +77,8 @@ public class OrderSettingController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		orderSettingService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        orderSettingService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

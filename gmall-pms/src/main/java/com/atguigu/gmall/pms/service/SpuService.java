@@ -10,20 +10,27 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * spu信息
  *
  * @author huxiuyuan
- * @email a811437621@gmail.com
- * @date 2021-09-28 16:01:55
+ * @email moumouguan@gmail.com
+ * @date 2021-11-21 05:23:24
  */
 public interface SpuService extends IService<SpuEntity> {
 
     PageResultVo queryPage(PageParamVo paramVo);
 
     /**
-     * 根据分类id分页查询商品列表
+     * 商品列表 - spu查询按钮
+     *
+     * @param cid
+     * @param paramVo
+     * @return ResponseVo<PageResultVo>
      */
-    PageResultVo queryCategoryByCategoryId(PageParamVo paramVo, Long categoryId);
+    PageResultVo queryCategorysByCid(Long cid, PageParamVo paramVo);
 
     /**
-     * spu大保存
+     * spu新增之大保存
+     *
+     * @param spu
+     * @return ResponseVo<Object>
      */
     void bigSave(SpuVo spu);
 }

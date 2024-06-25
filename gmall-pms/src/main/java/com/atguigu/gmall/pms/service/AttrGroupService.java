@@ -11,25 +11,27 @@ import java.util.List;
  * 属性分组
  *
  * @author huxiuyuan
- * @email a811437621@gmail.com
- * @date 2021-09-28 16:01:55
+ * @email fengge@atguigu.com
+ * @date 2021-11-21 05:23:24
  */
 public interface AttrGroupService extends IService<AttrGroupEntity> {
 
     PageResultVo queryPage(PageParamVo paramVo);
 
     /**
-     * 查询规格参数分组
-     * @param cid
-     * @return List<AttrGroupEntity>
+     * 属性维护 - 三级分类的规格参数分组查询
+     *
+     * @param cId
+     * @return ResponseVo<List < AttrGroupEntity>>
      */
-    List<AttrGroupEntity> selectAttrGroupByCid(Long cid);
+    List<AttrGroupEntity> queryAttrGroupByCId(Long cId);
 
     /**
-     * 查询分类下的组及规格参数
-     * @param cid
-     * @return List<AttrGroupEntity>
+     * 查询分类下的分组和分组下的具体属性
+     *
+     * @param cId
+     * @return ResponseVo<List < AttrGroupEntity>>
      */
-    List<AttrGroupEntity> queryAttrGroupAndAttrByCid(Long cid);
+    List<AttrGroupEntity> queryAttrGroupsByCId(Long cId);
 }
 

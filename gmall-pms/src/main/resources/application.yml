@@ -1,12 +1,13 @@
-# SpringCloud相关配置
+#SpringCloud相关配置
 server:
-  # 端口号
+  #端口号
   port: 18081
 spring:
   cloud:
+    #nacos配置
     nacos:
       discovery:
-        # 注册中心地址
+        #注册中心地址
         server-addr: 192.168.0.101:8848
     # sentinel配置
     sentinel:
@@ -14,18 +15,22 @@ spring:
         dashboard: 192.168.0.101:8080
         # 服务与sentinel交互使用的端口号，一个服务可以有多个端口号
         port: 8719
-  # zipkin相关配置
+    #seata配置
+    alibaba:
+      seata:
+        tx-service-group: gmall-tx-group
+  #zipkin相关配置
   zipkin:
     base-url: http://192.168.0.101:9411
     discovery-client-enabled: false
-    # 发送方式web(http)
+    #发送方式web(http)
     sender:
       type: web
-  # 链路追踪的采集率
+  #链路追踪的采集率
   sleuth:
     sampler:
       probability: 1
-  # SpringBoot的数据源和redis相关配置
+  #SpringBoot的数据源和redis相关配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/guli_pms?useSSL=false&useUnicode=true&characterEncoding=UTF8
@@ -34,11 +39,11 @@ spring:
   redis:
     host: localhost
     port: 6379
-# 开启feign的sentinel功能
+#开启feign的sentinel功能
 feign:
   sentinel:
     enabled: true
-# Mybatis-Plus配置
+#Mybatis-Plus配置
 mybatis-plus:
   mapper-locations: classpath:mapper/pms/*.xml
   type-aliases-package: com.atguigu.gmall.pms.entitys

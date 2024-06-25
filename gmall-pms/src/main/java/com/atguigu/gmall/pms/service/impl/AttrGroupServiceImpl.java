@@ -9,7 +9,6 @@ import com.atguigu.gmall.pms.mapper.AttrMapper;
 import com.atguigu.gmall.pms.service.AttrGroupService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,29 +36,41 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
         return new PageResultVo(page);
     }
 
+    /**
+     * 属性维护 - 三级分类的规格参数分组查询
+     *
+     * @param cId
+     * @return ResponseVo<List < AttrGroupEntity>>
+     */
     @Override
-    public List<AttrGroupEntity> selectAttrGroupByCid(Long cid) {
-        QueryWrapper<AttrGroupEntity> wrapper = new QueryWrapper<>();
-        wrapper.eq("category_id",cid);
+    public List<AttrGroupEntity> queryAttrGroupByCId(Long cId) {
+        QueryWrapper<AttrGroupEntity> query = new QueryWrapper<>();
+        query.eq("category_id", cId);
 
-        return attrGroupMapper.selectList(wrapper);
+        return attrGroupMapper.selectList(query);
     }
 
     /**
-     * 查询分类下的组及规格参数
-     * @param cid
-     * @return List<AttrGroupEntity>
+     * 查询分类下的分组和分组下的具体属性
+     *
+     * @param cId
+     * @return ResponseVo<List < AttrGroupEntity>>
      */
     @Override
-    public List<AttrGroupEntity> queryAttrGroupAndAttrByCid(Long cid) {
-        List<AttrGroupEntity> attrGroupEntities = this.attrGroupMapper.selectList(Wrappers.<AttrGroupEntity>lambdaQuery().eq(AttrGroupEntity::getCategoryId, cid));
+    public List<AttrGroupEntity> queryAttrGroupsByCId(Long cId) {
+        // 根据 category_id 差分组
+        QueryWrapper<AttrGroupEntity> query = new QueryWrapper<>();
+        query.eq("category_id", cId);
+        List<AttrGroupEntity> attrGroupEntities = attrGroupMapper.selectList(query);
+        // 如果分组不为空 遍历分组 查询组下规格参数
         if (CollectionUtils.isEmpty(attrGroupEntities)) {
             return null;
         }
-        attrGroupEntities.forEach(e -> {
-            List<AttrEntity> attrEntities = this.attrMapper.selectList(Wrappers.<AttrEntity>lambdaQuery().eq(AttrEntity::getGroupId, e.getId()).eq(AttrEntity::getType, 1));
-            if (!CollectionUtils.isEmpty(attrEntities)) e.setAttrEntities(attrEntities);
-        });
+        attrGroupEntities.forEach(attrGroupEntity ->
+                attrGroupEntity.setAttrEntities(attrMapper.selectList(new QueryWrapper<AttrEntity>().
+                        eq("group_id", attrGroupEntity.getId()).eq("type", 1)))
+
+        );
         return attrGroupEntities;
     }
 

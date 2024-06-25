@@ -15,9 +15,9 @@ import java.util.List;
 /**
  * 品牌分类关联
  *
- * @author huxiuyuan
- * @email a811437621@gmail.com
- * @date 2021-09-28 16:01:55
+ * @author huXiuYuan
+ * @email h811437621@gmail.com
+ * @date 2021-11-21 05:23:24
  */
 @Api(tags = "品牌分类关联 管理")
 @RestController
@@ -32,7 +32,7 @@ public class CategoryBrandController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> queryCategoryBrandByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> queryCategoryBrandByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = categoryBrandService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -44,8 +44,8 @@ public class CategoryBrandController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<CategoryBrandEntity> queryCategoryBrandById(@PathVariable("id") Long id){
-		CategoryBrandEntity categoryBrand = categoryBrandService.getById(id);
+    public ResponseVo<CategoryBrandEntity> queryCategoryBrandById(@PathVariable("id") Long id) {
+        CategoryBrandEntity categoryBrand = categoryBrandService.getById(id);
 
         return ResponseVo.ok(categoryBrand);
     }
@@ -55,8 +55,8 @@ public class CategoryBrandController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody CategoryBrandEntity categoryBrand){
-		categoryBrandService.save(categoryBrand);
+    public ResponseVo<Object> save(@RequestBody CategoryBrandEntity categoryBrand) {
+        categoryBrandService.save(categoryBrand);
 
         return ResponseVo.ok();
     }
@@ -66,8 +66,8 @@ public class CategoryBrandController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody CategoryBrandEntity categoryBrand){
-		categoryBrandService.updateById(categoryBrand);
+    public ResponseVo update(@RequestBody CategoryBrandEntity categoryBrand) {
+        categoryBrandService.updateById(categoryBrand);
 
         return ResponseVo.ok();
     }
@@ -77,8 +77,8 @@ public class CategoryBrandController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		categoryBrandService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        categoryBrandService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

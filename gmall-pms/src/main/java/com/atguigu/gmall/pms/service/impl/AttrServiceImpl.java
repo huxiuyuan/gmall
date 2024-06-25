@@ -8,52 +8,17 @@ import com.atguigu.gmall.pms.service.AttrService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 
 @Service("attrService")
 public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> implements AttrService {
 
-    @Resource
+    @Autowired
     private AttrMapper attrMapper;
-
-    /**
-     * 查询分类下的规格参数 一个分类下有许多规格大分组
-     * @param cid
-     * @param type
-     * @param searchType
-     * @return List<AttrEntity>
-     */
-    @Override
-    public List<AttrEntity> queryAttrByCidOrTypeOrSearchType(Long cid, Integer type, Integer searchType) {
-        QueryWrapper<AttrEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("category_id",cid);
-        // 判断type是否为空
-        if (type != null){
-            queryWrapper.eq("type",type);
-        }
-        // 判断searchType是否为空
-        if (searchType != null){
-            queryWrapper.eq("search_type",searchType);
-        }
-        return attrMapper.selectList(queryWrapper);
-    }
-
-    /**
-     * 分组下的规格参数查询 大分组下的小规格参数
-     * @param gid group_id
-     * @return List<AttrEntity>
-     */
-    @Override
-    public List<AttrEntity> queryAttrListByGid(Long gid) {
-        QueryWrapper<AttrEntity> query = new QueryWrapper<>();
-        query.eq("group_id",gid);
-
-        return attrMapper.selectList(query);
-    }
 
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
@@ -63,6 +28,42 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper, AttrEntity> impleme
         );
 
         return new PageResultVo(page);
+    }
+
+    /**
+     * 属性维护 - 属性分组 - 维护属性
+     *
+     * @param gid
+     * @return ResponseVo<List < AttrEntity>>
+     */
+    @Override
+    public List<AttrEntity> queryAttrsByGid(Long gid) {
+        QueryWrapper<AttrEntity> query = new QueryWrapper<>();
+        query.eq("group_id", gid);
+        return attrMapper.selectList(query);
+    }
+
+    /**
+     * 查询分类下的规格参数
+     *
+     * @param cid
+     * @param type
+     * @param searchType
+     * @return ResponseVo<List < AttrEntity>>
+     */
+    @Override
+    public List<AttrEntity> queryAttrsByCIdOrTypeOrSearchType(Long cid, Integer type, Integer searchType) {
+        QueryWrapper<AttrEntity> query = new QueryWrapper<>();
+        query.eq("category_id", cid);
+        // 判断type是否为空 属性类型[0-销售属性，1-基本属性，2-既是销售属性又是基本属性]
+        if (type != null) {
+            query.eq("type", type);
+        }
+        // 判断searchType是否为空 是否需要检索[0-不需要，1-需要]
+        if (searchType != null) {
+            query.eq("search_type", searchType);
+        }
+        return attrMapper.selectList(query);
     }
 
 }
