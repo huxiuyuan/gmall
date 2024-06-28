@@ -1,5 +1,6 @@
 package com.atguigu.gmall.pms;
 
+import io.seata.spring.annotation.datasource.EnableAutoDataSourceProxy;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,7 +10,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @MapperScan("com.atguigu.gmall.pms.mapper")
 @EnableSwagger2
 @EnableFeignClients
-// @EnableDiscoveryClient
 @SpringBootApplication
 public class GmallPmsApplication {
 

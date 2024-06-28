@@ -17,16 +17,16 @@ import org.springframework.context.annotation.Primary;
 public class DataSourceProxyConfig {
 
     /**
-     * 需要将 DataSourceProxy 设置为主数据源，否则事务无法回滚
+     * 需要将 Seata的DataSourceProxy 设置为主数据源，否则事务无法回滚
      *
      * @return The default datasource
      */
     @Primary
     @Bean("dataSource")
-    public DataSourceProxy dataSourceProxy(@Value("${spring.datasource.driver-class-name}") String driverClassName,
-                                           @Value("${spring.datasource.url}") String url,
-                                           @Value("${spring.datasource.username}") String username,
-                                           @Value("${spring.datasource.password}") String password
+    public DataSourceProxy dataSourceProxy(@Value("${spring.datasource.driver-class-name}")String driverClassName,
+            @Value("${spring.datasource.url}")String url,
+            @Value("${spring.datasource.username}")String username,
+            @Value("${spring.datasource.password}")String password
     ) {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setDriverClassName(driverClassName);

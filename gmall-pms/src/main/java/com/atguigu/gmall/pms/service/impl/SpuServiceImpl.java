@@ -3,7 +3,7 @@ package com.atguigu.gmall.pms.service.impl;
 import com.atguigu.gmall.common.bean.PageParamVo;
 import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.pms.entity.*;
-import com.atguigu.gmall.pms.feign.GmallSmsClient;
+import com.atguigu.gmall.pms.feignclient.GmallSmsClient;
 import com.atguigu.gmall.pms.mapper.SkuMapper;
 import com.atguigu.gmall.pms.mapper.SpuDescMapper;
 import com.atguigu.gmall.pms.mapper.SpuMapper;
@@ -14,11 +14,13 @@ import com.atguigu.gmall.pms.service.SpuService;
 import com.atguigu.gmall.pms.vo.SkuVo;
 import com.atguigu.gmall.pms.vo.SpuAttrValueVo;
 import com.atguigu.gmall.pms.vo.SpuVo;
-import com.atguigu.gmall.sms.vo.SkuSaleVo;
+import com.atguigu.gmall.sms.vo.SkuSalesVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.seata.core.context.RootContext;
 import io.seata.spring.annotation.GlobalTransactional;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+@Slf4j
 @Service("spuService")
 public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements SpuService {
 
@@ -92,6 +95,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     @GlobalTransactional
     @Override
     public void bigSave(SpuVo spu) {
+        log.info("XIDDDDD{}", RootContext.getXID());
         // 1.保存spu相关信息 三张表
         // 1.1 保存pms_spu
         Long spuId = saveSpuInfo(spu);
@@ -148,10 +152,10 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
                 skuAttrValueService.saveBatch(saleAttrs);
 
                 // 3.保存sku营销信息 三张表
-                SkuSaleVo skuSaleVo = new SkuSaleVo();
+                SkuSalesVo skuSaleVo = new SkuSalesVo();
                 BeanUtils.copyProperties(sku, skuSaleVo);
                 skuSaleVo.setSkuId(skuId);
-                gmallSmsClient.saveSales(skuSaleVo);
+                gmallSmsClient.saveSkuSales(skuSaleVo);
             });
         }
     }

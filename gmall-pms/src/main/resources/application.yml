@@ -45,9 +45,13 @@ feign:
     enabled: true
 #Mybatis-Plus配置
 mybatis-plus:
-  mapper-locations: classpath:mapper/pms/*.xml
+  mapper-locations: classpath*:mapper/pms/*.xml
   type-aliases-package: com.atguigu.gmall.pms.entitys
   global-config:
     db-config:
       id-type: auto
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #mybatis-plus配置控制台打印完整带参数sql语句
+seata:
+  enabled: true
 
