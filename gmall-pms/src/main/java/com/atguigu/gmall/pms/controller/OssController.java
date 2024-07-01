@@ -29,7 +29,7 @@ public class OssController {
     /**
      * 阿里云AccessKeyId
      */
-    @Value(("${aliyun.access.id}"))
+    @Value(("${aliyun.access.accessKeyId}"))
     private String accessKeyId;
 
     /**
