@@ -17,7 +17,7 @@ public interface GmallPmsApi {
     /**
      * 搜索服务数据导入第一步：分页查询spu
      *
-     * @param paramVo
+     * @param paramVo 分页参数
      * @return ResponseVo<List < SpuEntity>>
      */
     @PostMapping("/pms/spu/page")
@@ -26,7 +26,7 @@ public interface GmallPmsApi {
     /**
      * 搜索服务数据导入第二部：根据spuId查询sku
      *
-     * @param sid
+     * @param sid spuID
      * @return ResponseVo<List < SkuEntity>>
      */
     @GetMapping("/pms/sku/spu/{spuId}")
@@ -35,7 +35,7 @@ public interface GmallPmsApi {
     /**
      * 搜索服务数据导入第四步：根据品牌Id查询品牌
      *
-     * @param id
+     * @param id 品牌Id
      * @return ResponseVo<CategoryEntity>
      */
     @GetMapping("/pms/brand/{id}")
@@ -44,31 +44,33 @@ public interface GmallPmsApi {
     /**
      * 搜索服务数据导入第五步：根据分类Id查询分类
      *
-     * @param id
+     * @param id 分类ID
      * @return ResponseVo<CategoryEntity>
      */
     @GetMapping("/pms/category/{id}")
     ResponseVo<CategoryEntity> queryCategoryById(@PathVariable("id") Long id);
 
     /**
-     * 数据导入第六步：根据 cid 和 spuId 查询销售类型的检索属性及值
+     * 数据导入第六步：根据 cid 和 spuId 查询基本类型的检索属性及值
      *
-     * @param cid
-     * @param skuId
-     */
-    @GetMapping("/pms/skuattrvalue/category/{cid}")
-    ResponseVo<List<SkuAttrValueEntity>> querySearchAttrValueByCidAndSkuId(
-            @PathVariable("cid") Long cid,
-            @RequestParam("skuId") Long skuId);
-
-    /**
-     * 数据导入第七步：根据 cid 和 spuId 查询基本类型的检索属性及值
-     *
-     * @param cid
-     * @param spuId
+     * @param cid   分类ID
+     * @param spuId spuID
+     * @return ResponseVo<List < SpuAttrValueEntity>>
      */
     @GetMapping("/pms/spuattrvalue/category/{cid}")
     ResponseVo<List<SpuAttrValueEntity>> querySearchAttrValueByCidAndSpuId(
             @PathVariable("cid") Long cid,
             @RequestParam("spuId") Long spuId);
+
+    /**
+     * 数据导入第七步：根据 cid 和 spuId 查询销售类型的检索属性及值
+     *
+     * @param cid   分类ID
+     * @param skuId skuID
+     * @return ResponseVo<List < SkuAttrValueEntity>>
+     */
+    @GetMapping("/pms/skuattrvalue/category/{cid}")
+    ResponseVo<List<SkuAttrValueEntity>> querySearchAttrValueByCidAndSkuId(
+            @PathVariable("cid") Long cid,
+            @RequestParam("skuId") Long skuId);
 }

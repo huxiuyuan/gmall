@@ -27,8 +27,8 @@ public class Goods {
     private Double price;
 
     // 排序所需的字段：
-    @Field(type = FieldType.Integer)
-    private Integer sales; // 销量排序所需字段
+    @Field(type = FieldType.Long)
+    private Long sales; // 销量排序所需字段
     @Field(type = FieldType.Date, format = DateFormat.date)
     private Date createTime; // 新品排序所需字段
     @Field(type = FieldType.Boolean)

@@ -20,6 +20,6 @@ public interface GmallWmsApi {
      * @param sid
      * @return ResponseVo<List < WareSkuEntity>>
      */
-    @GetMapping("wms/waresku/sku/{skuId}")
+    @GetMapping("/wms/waresku/sku/{skuId}")
     ResponseVo<List<WareSkuEntity>> queryWareSkuBySkuId(@PathVariable("skuId") Long sid);
 }

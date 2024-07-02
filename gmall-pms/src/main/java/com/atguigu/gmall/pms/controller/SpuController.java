@@ -63,7 +63,7 @@ public class SpuController {
      * @param paramVo
      * @return
      */
-    @PostMapping("page")
+    @PostMapping("/page")
     @ApiOperation("分页查询")
     public ResponseVo<List<SpuEntity>> querySpuByPageJson(@RequestBody PageParamVo paramVo) {
         PageResultVo pageResultVo = spuService.queryPage(paramVo);
