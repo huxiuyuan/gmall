@@ -32,6 +32,8 @@ spring:
       uris: 192.168.0.101:9200
   jackson:
     default-property-inclusion: non_null
+  thymeleaf:
+    cache: false
 #开启feign的sentinel功能
 feign:
   sentinel:

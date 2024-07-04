@@ -43,6 +43,13 @@ spring:
 feign:
   sentinel:
     enabled: true
+  # 设置 feign 超时时间
+  client:
+    config:
+      # default 设置的全局超时时间，指定服务名称可以设置单个服务的超时时间
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
 #Mybatis-Plus配置
 mybatis-plus:
   mapper-locations: classpath*:mapper/pms/*.xml
