@@ -1,5 +1,6 @@
 package com.atguigu.search.gmall.search.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Document(indexName = "goods", shards = 3, replicas = 2)
 @Data
+@JsonIgnoreProperties("_class")
 public class Goods {
 
     // sku相关字段

@@ -2,6 +2,7 @@ package com.atguigu.search.gmall.search.controller;
 
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.search.gmall.search.pojo.SearchParamVo;
+import com.atguigu.search.gmall.search.pojo.SearchResponseVo;
 import com.atguigu.search.gmall.search.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +25,9 @@ public class SearchController {
      * @param searchParamVo 查询条件
      */
     @GetMapping("search")
-    public ResponseVo search(SearchParamVo searchParamVo) {
-        this.searchService.search(searchParamVo);
+    public ResponseVo<SearchResponseVo> search(SearchParamVo searchParamVo) {
+        SearchResponseVo searchResponseVo = this.searchService.search(searchParamVo);
 
-        return ResponseVo.ok();
+        return ResponseVo.ok(searchResponseVo);
     }
 }

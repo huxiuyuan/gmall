@@ -1,6 +1,7 @@
 package com.atguigu.search.gmall.search.service;
 
 import com.atguigu.search.gmall.search.pojo.SearchParamVo;
+import com.atguigu.search.gmall.search.pojo.SearchResponseVo;
 
 /**
  * @author huXiuYuan
@@ -13,5 +14,5 @@ public interface SearchService {
      *
      * @param searchParamVo 查询条件
      */
-    void search(SearchParamVo searchParamVo);
+    SearchResponseVo search(SearchParamVo searchParamVo);
 }
