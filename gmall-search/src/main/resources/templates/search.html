@@ -444,9 +444,11 @@
 
 <script th:inline="javascript">
     let urlParams = decodeURI([[${#httpServletRequest.queryString}]]);
+    let pageNum = [[${searchParam.pageNum}]]
 
     function cancelProp(prop){
         urlParams = urlParams.replace('&props=' + prop, '');
+        urlParams = urlParams.replace('&pageNum=' + pageNum, '');
         window.location = '/search?' + urlParams;
     }
 
