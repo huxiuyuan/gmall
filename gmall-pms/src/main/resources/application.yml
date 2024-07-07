@@ -36,9 +36,22 @@ spring:
     url: jdbc:mysql://localhost:3306/guli_pms?useSSL=false&useUnicode=true&characterEncoding=UTF8
     username: root
     password: 123456
+  #RabbitMq相关配置
+  rabbitmq:
+    host: 192.168.0.101
+    port: 5672
+    virtual-host: /hxy
+    username: hxy
+    password: hxy20010302
+    #生产者确认类型：none-不确认，simple-阻塞方式确认，correlated-异步监听方式确认
+    publisher-confirm-type: correlated
+    #生产者确定消息是否到达队列
+    publisher-returns: true
+  #redis相关配置
   redis:
     host: localhost
     port: 6379
+
 #开启feign的sentinel功能
 feign:
   sentinel:
@@ -50,6 +63,7 @@ feign:
       default:
         connectTimeout: 5000
         readTimeout: 5000
+
 #Mybatis-Plus配置
 mybatis-plus:
   mapper-locations: classpath*:mapper/pms/*.xml

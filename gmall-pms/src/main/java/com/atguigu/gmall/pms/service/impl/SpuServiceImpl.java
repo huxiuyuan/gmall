@@ -22,6 +22,7 @@ import io.seata.core.context.RootContext;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,9 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
 
     @Autowired
     private GmallSmsClient gmallSmsClient;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
@@ -106,14 +110,19 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         // 1.3 保存pms_spu_attr_value
         saveBaseAttr(spu, spuId);
 
-//        int i = 1/0;
-
         // 2.保存sku相关信息 三张表
         saveSkuInfo(spu, spuId);
 
-//        int o = 1/0;
+        // 发送新增spu的消息
+        this.rabbitTemplate.convertAndSend("PMS_SPU_EXCHANGE", "item.insert", spuId);
     }
 
+    /**
+     * 保存sku信息
+     *
+     * @param spu
+     * @param spuId
+     */
     private void saveSkuInfo(SpuVo spu, Long spuId) {
         List<SkuVo> skus = spu.getSkus();
         if (!CollectionUtils.isEmpty(skus)) {
@@ -142,7 +151,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
                     }).collect(Collectors.toList()));
                 }
 
-                // 2.3 保存pms_sku_attr_value
+                // 2.3 保存pms_sku_attr_value sku销售属性和值
                 List<SkuAttrValueEntity> saleAttrs = sku.getSaleAttrs();
                 if (!CollectionUtils.isEmpty(saleAttrs)) {
                     saleAttrs.forEach(skuAttrValueEntity -> {
@@ -160,6 +169,12 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         }
     }
 
+    /**
+     * 保存spu基本属性和值
+     *
+     * @param spu
+     * @param spuId
+     */
     private void saveBaseAttr(SpuVo spu, Long spuId) {
         List<SpuAttrValueVo> baseAttrs = spu.getBaseAttrs();
         if (!CollectionUtils.isEmpty(baseAttrs)) {
@@ -174,6 +189,12 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         }
     }
 
+    /**
+     * 保存spu信息介绍
+     *
+     * @param spu
+     * @param spuId
+     */
     private void saveSpuDesc(SpuVo spu, Long spuId) {
         List<String> imagesList = spu.getSpuImages();
         if (!CollectionUtils.isEmpty(imagesList)) {
@@ -184,6 +205,12 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         }
     }
 
+    /**
+     * 保存spu信息
+     *
+     * @param spu
+     * @return
+     */
     private Long saveSpuInfo(SpuVo spu) {
         spu.setCreateTime(new Date());
         spu.setUpdateTime(spu.getCreateTime());

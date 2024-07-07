@@ -60,6 +60,7 @@ class GmallSearchApplicationTests {
 
             // 2.遍历spu集合查询每个spu下的所有sku
             spuEntities.forEach(spuEntity -> {
+                // 3.根据spuId查询spu下的所有sku
                 ResponseVo<List<SkuEntity>> skuResponseVo = this.gmallPmsClient.querySkusBySpuId(spuEntity.getId());
                 List<SkuEntity> skuEntities = skuResponseVo.getData();
                 if (!CollectionUtils.isEmpty(skuEntities)) {
@@ -76,7 +77,7 @@ class GmallSearchApplicationTests {
                     ResponseVo<List<SpuAttrValueEntity>> spuAttrResponseVo = this.gmallPmsClient.querySearchAttrValueByCidAndSpuId(spuEntity.getCategoryId(), spuEntity.getId());
                     List<SpuAttrValueEntity> spuAttrValueEntities = spuAttrResponseVo.getData();
 
-                    // 将sku集合转换成goods集合
+                    // 7.将sku集合转换成goods集合
                     List<Goods> goodsList = skuEntities.stream().map(skuEntity -> {
                         Goods goods = new Goods();
                         // 给goods设置参数
@@ -138,7 +139,8 @@ class GmallSearchApplicationTests {
 
                         return goods;
                     }).collect(Collectors.toList());
-                    // 保存到ES
+
+                    // 8.保存到ES
                     this.goodsRepository.saveAll(goodsList);
                 }
             });

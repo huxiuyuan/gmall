@@ -22,16 +22,36 @@ spring:
     #发送方式web(http)
     sender:
       type: web
-  #链路追踪的采集率
+  #sleuth相关配置
   sleuth:
+    #链路追踪的采集率
     sampler:
       probability: 1
   #elsticsearch配置
   elasticsearch:
     rest:
       uris: 192.168.0.101:9200
+  #RabbitMq相关配置
+  rabbitmq:
+    host: 192.168.0.101
+    port: 5672
+    virtual-host: /hxy
+    username: hxy
+    password: hxy20010302
+    # 消费者
+    listener:
+      simple:
+        # 消费者确认模式 none：不确认模式(只要消息到消费者即被确认) auto：自动确认模式(只要消费者没有异常就会被确认，有异常则会无限重试) manual：手动确认模式
+        acknowledge-mode: manual
+        # 能者多劳
+        prefetch: 1
+        # 多线程消费
+        concurrency: 4
+  #jackson相关配置
   jackson:
+    #只序列化/反序列化非空属性
     default-property-inclusion: non_null
+  #thymeleaf相关配置
   thymeleaf:
     cache: false
 #开启feign的sentinel功能

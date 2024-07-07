@@ -15,6 +15,15 @@ import java.util.List;
 public interface GmallPmsApi {
 
     /**
+     * 根据spuId查询spu
+     *
+     * @param id spuId
+     * @return
+     */
+    @GetMapping("/pms/spu/{id}")
+    ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id);
+
+    /**
      * 搜索服务数据导入第一步：分页查询spu
      *
      * @param paramVo 分页参数
