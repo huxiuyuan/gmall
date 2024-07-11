@@ -21,6 +21,8 @@ public class CorsConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         // 允许哪些域名跨域访问：*-代表允许所有域名跨域访问，但是不能携带cookie
         configuration.addAllowedOrigin("http://manager.gmall.com");
+        configuration.addAllowedOrigin("http://www.gmall.com");
+        configuration.addAllowedOrigin("http://gmall.com");
         configuration.addAllowedOrigin("http://localhost:1000");
         // 是否允许携带cookie
         configuration.setAllowCredentials(true);

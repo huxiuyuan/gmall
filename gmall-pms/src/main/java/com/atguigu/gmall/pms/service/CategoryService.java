@@ -25,5 +25,13 @@ public interface CategoryService extends IService<CategoryEntity> {
      * @return ResponseVo<List < CategoryEntity>>
      */
     List<CategoryEntity> queryCategoryByParentId(Long pId);
+
+    /**
+     * 根据一级分类id查询二、三级分类
+     *
+     * @param pid 一级分类id
+     * @return 二、三级分类
+     */
+    List<CategoryEntity> queryCategoriesWithSubsByPid(Long pid);
 }
 

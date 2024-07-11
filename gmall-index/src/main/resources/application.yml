@@ -1,0 +1,41 @@
+#SpringCloud相关配置
+server:
+  #端口号
+  port: 18087
+spring:
+  cloud:
+    #nacos配置
+    nacos:
+      discovery:
+        #注册中心地址
+        server-addr: 192.168.0.101:8848
+    #sentinel配置
+    sentinel:
+      transport:
+        dashboard: 192.168.0.101:8080
+        # 服务与sentinel交互使用的端口号，一个服务可以有多个端口号
+        port: 8719
+  #zipkin配置
+  zipkin:
+    base-url: http://192.168.0.101:9411
+    discovery-client-enabled: false
+    #发送方式web(http)
+    sender:
+      type: web
+  #sleuth相关配置
+  sleuth:
+    #链路追踪的采集率
+    sampler:
+      probability: 1
+  #thymeleaf相关配置
+  thymeleaf:
+    cache: false
+  #redis相关配置
+  redis:
+    host: 192.168.0.101
+    password: 123456
+#开启feign的sentinel功能
+feign:
+  sentinel:
+    enabled: true
+

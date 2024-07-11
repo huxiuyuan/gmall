@@ -24,6 +24,24 @@ public interface GmallPmsApi {
     ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id);
 
     /**
+     * 根据pId查询分类
+     *
+     * @param pId 上级ID
+     * @return
+     */
+    @GetMapping("/pms/category/parent/{parentId}")
+    ResponseVo<List<CategoryEntity>> queryCategoryByParentId(@PathVariable("parentId") Long pId);
+
+    /**
+     * 根据一级分类id查询二、三级分类
+     *
+     * @param pid 一级分类id
+     * @return 二、三级分类
+     */
+    @GetMapping("/pms/category/all/paren/{pid}")
+    ResponseVo<List<CategoryEntity>> queryCategoriesWithSubsByPid(@PathVariable("pid") Long pid);
+
+    /**
      * 搜索服务数据导入第一步：分页查询spu
      *
      * @param paramVo 分页参数

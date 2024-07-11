@@ -28,6 +28,19 @@ public class CategoryController {
     private CategoryService categoryService;
 
     /**
+     * 根据一级分类id查询二、三级分类
+     *
+     * @param pid 一级分类id
+     * @return 二、三级分类
+     */
+    @GetMapping("/all/paren/{pid}")
+    @ApiOperation("根据一级分类id查询二、三级分类")
+    public ResponseVo<List<CategoryEntity>> queryCategoriesWithSubsByPid(@PathVariable("pid") Long pid) {
+        List<CategoryEntity> categoryEntityList = this.categoryService.queryCategoriesWithSubsByPid(pid);
+        return ResponseVo.ok(categoryEntityList);
+    }
+
+    /**
      * 分类维护 - 树状图查询
      *
      * @param pId

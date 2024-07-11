@@ -45,4 +45,14 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
         return categoryMapper.selectList(query);
     }
 
+    /**
+     * 根据一级分类id查询二、三级分类
+     *
+     * @param pid 一级分类id
+     * @return 二、三级分类
+     */
+    @Override
+    public List<CategoryEntity> queryCategoriesWithSubsByPid(Long pid) {
+        return this.categoryMapper.queryCategoriesByPid(pid);
+    }
 }

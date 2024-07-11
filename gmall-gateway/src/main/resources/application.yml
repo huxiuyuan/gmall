@@ -31,3 +31,12 @@ spring:
           uri: lb://search-service
           predicates:
             - Host=search.gmall.com
+        - id: index-route
+          uri: lb://index-service
+          predicates:
+            - Host=gmall.com,www.gmall.com
+        #专门为异步请求提供
+        - id: index-route
+          uri: lb://index-service
+          predicates:
+            - Path=/index/**
