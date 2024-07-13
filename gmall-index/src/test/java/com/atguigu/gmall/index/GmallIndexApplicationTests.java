@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 class GmallIndexApplicationTests {
 
     @Autowired
-    private RedisTemplate redisTemplate; // 默认使用jdk提供的二进制序列化方式，难以调试
+    private RedisTemplate redisTemplate; // RedisTemplate默认使用jdk提供的二进制序列化方式，难以调试
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;

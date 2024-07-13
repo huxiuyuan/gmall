@@ -47,4 +47,88 @@ public class IndexController {
     public ResponseVo<List<CategoryEntity>> queryLv23CategoriesByPid(@PathVariable("pid") Long pid) {
         return ResponseVo.ok(this.indexService.queryLv23CategoriesByPid(pid));
     }
+
+    /**
+     * 本地锁测试
+     *
+     * @return
+     */
+    @GetMapping("/index/test_local_lock")
+    @ResponseBody
+    public ResponseVo<Object> testLocalLock() {
+        this.indexService.testLocalLock();
+        return ResponseVo.ok(null);
+    }
+
+    /**
+     * 分布式锁(基于redis) 版本1
+     *
+     * @return
+     */
+    @GetMapping("/index/test_distributed_lock1")
+    @ResponseBody
+    public ResponseVo<Object> testDistributedLock1() {
+        this.indexService.testDistributedLock1();
+        return ResponseVo.ok(null);
+    }
+
+    /**
+     * 分布式锁(基于redis) 版本2
+     *
+     * @return
+     */
+    @GetMapping("/index/test_distributed_lock2")
+    @ResponseBody
+    public ResponseVo<Object> testDistributedLock2() {
+        this.indexService.testDistributedLock2();
+        return ResponseVo.ok(null);
+    }
+
+    /**
+     * 分布式锁(基于redis) 版本3
+     *
+     * @return
+     */
+    @GetMapping("/index/test_distributed_lock3")
+    @ResponseBody
+    public ResponseVo<Object> testDistributedLock3() {
+        this.indexService.testDistributedLock3();
+        return ResponseVo.ok(null);
+    }
+
+    /**
+     * 分布式锁(基于redis) 版本4
+     *
+     * @return
+     */
+    @GetMapping("/index/test_distributed_lock4")
+    @ResponseBody
+    public ResponseVo<Object> testDistributedLock4() {
+        this.indexService.testDistributedLock4();
+        return ResponseVo.ok(null);
+    }
+
+    /**
+     * 分布式锁(基于redis) 版本5
+     *
+     * @return
+     */
+    @GetMapping("/index/test_distributed_lock5")
+    @ResponseBody
+    public ResponseVo<Object> testDistributedLock5() {
+        this.indexService.testDistributedLock5();
+        return ResponseVo.ok(null);
+    }
+
+    /**
+     * 分布式锁(基于redis) 版本6
+     *
+     * @return
+     */
+    @GetMapping("/index/test_distributed_lock6")
+    @ResponseBody
+    public ResponseVo<Object> testDistributedLock6() {
+        this.indexService.testDistributedLock6();
+        return ResponseVo.ok(null);
+    }
 }

@@ -25,4 +25,53 @@ public interface IndexService {
      * @return 二、三级分类
      */
     List<CategoryEntity> queryLv23CategoriesByPid(Long pid);
+
+    /**
+     * 本地锁测试
+     *
+     * @return
+     */
+    void testLocalLock();
+
+    /**
+     * 分布式锁(基于redis)测试 版本1
+     *
+     * @return
+     */
+    void testDistributedLock1();
+
+    /**
+     * 分布式锁(基于redis)测试 版本2
+     *
+     * @return
+     */
+    void testDistributedLock2();
+
+    /**
+     * 分布式锁(基于redis) 版本3
+     *
+     * @return
+     */
+    void testDistributedLock3();
+
+    /**
+     * 分布式锁(基于redis) 版本4
+     *
+     * @return
+     */
+    void testDistributedLock4();
+
+    /**
+     * 分布式锁(基于redis) 版本5
+     *
+     * @return
+     */
+    void testDistributedLock5();
+
+    /**
+     * 分布式锁(基于redis) 版本6
+     *
+     * @return
+     */
+    void testDistributedLock6();
 }
