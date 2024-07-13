@@ -74,4 +74,11 @@ public interface IndexService {
      * @return
      */
     void testDistributedLock6();
+
+    /**
+     * Redisson分布式锁
+     *
+     * @return
+     */
+    void testRedissonLock();
 }

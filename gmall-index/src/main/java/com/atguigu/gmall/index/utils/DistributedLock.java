@@ -100,7 +100,7 @@ public class DistributedLock {
                 "else " +
                 "   return 0 " +
                 "end";
-        // 定时器: 每隔 expire / 2 秒执行一次
-        this.scheduledFuture = ScheduledExecutorUtil.scheduleAtFixedRate(() -> redisTemplate.execute(new DefaultRedisScript<>(script, Boolean.class), Arrays.asList(lockName), uuid, expire.toString()), expire / 2, expire / 2, TimeUnit.SECONDS);
+        // 定时器: 每隔 expire / 3 秒执行一次
+        this.scheduledFuture = ScheduledExecutorUtil.scheduleAtFixedRate(() -> redisTemplate.execute(new DefaultRedisScript<>(script, Boolean.class), Arrays.asList(lockName), uuid, expire.toString()), expire / 3, expire / 3, TimeUnit.SECONDS);
     }
 }

@@ -2,12 +2,15 @@ package com.atguigu.gmall.index.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.atguigu.gmall.common.bean.ResponseVo;
+import com.atguigu.gmall.index.annotation.GmallCache;
 import com.atguigu.gmall.index.feignclient.GmallPmsClient;
 import com.atguigu.gmall.index.service.IndexService;
 import com.atguigu.gmall.index.utils.DistributedLock;
 import com.atguigu.gmall.pms.entity.CategoryEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -38,10 +41,18 @@ public class IndexServiceImpl implements IndexService {
     @Autowired
     private DistributedLock distributedLock;
 
+    @Autowired
+    private RedissonClient redissonClient;
+
     /**
      * 分类缓存前缀
      */
     private static final String KEY_PREFIX = "index:cates:";
+
+    /**
+     * 分类分布式锁前缀
+     */
+    private static final String LOCK_PREFIX = "index:cates:lock:";
 
     /**
      * 查询所有一级分类
@@ -61,23 +72,51 @@ public class IndexServiceImpl implements IndexService {
      * @return 二、三级分类
      */
     @Override
+    @GmallCache(prefix = KEY_PREFIX, timeout = 129600, random = 14400, lock = LOCK_PREFIX)
     public List<CategoryEntity> queryLv23CategoriesByPid(Long pid) {
-        // 先查询缓存，如果缓存命中则直接返回
+        ResponseVo<List<CategoryEntity>> listResponseVo = this.gmallPmsClient.queryCategoriesWithSubsByPid(pid);
+        return listResponseVo.getData();
+    }
+
+    /**
+     * 根据一级分类id查询二、三级分类
+     *
+     * @param pid 一级分类id
+     * @return 二、三级分类
+     */
+    public List<CategoryEntity> queryLv23CategoriesByPidV2(Long pid) {
+        // 1.先查询缓存，如果缓存命中则直接返回
         String json = this.redisTemplate.opsForValue().get(KEY_PREFIX + pid);
         if (StringUtils.isNotBlank(json)) {
             return JSON.parseArray(json, CategoryEntity.class);
         }
-        // 如果缓存没有命中，调用远程接口获取数据，放入缓存
-        ResponseVo<List<CategoryEntity>> listResponseVo = this.gmallPmsClient.queryCategoriesWithSubsByPid(pid);
-        List<CategoryEntity> categoriesEntityList = listResponseVo.getData();
-        // 放入缓存，为了防止缓存穿透，即使数据为null也进行缓存
-        if (!CollectionUtils.isEmpty(categoriesEntityList)) {
-            // 为了防止缓存雪崩，给缓存时间添加随机值
-            this.redisTemplate.opsForValue().set(KEY_PREFIX + pid, JSON.toJSONString(categoriesEntityList), 90 + new Random().nextInt(10), TimeUnit.DAYS);
-        } else {
-            this.redisTemplate.opsForValue().set(KEY_PREFIX + pid, JSON.toJSONString(categoriesEntityList), 5, TimeUnit.MINUTES);
+
+        // 为了防止缓存击穿，添加分布式锁
+        RLock fairLock = this.redissonClient.getFairLock(LOCK_PREFIX + pid);
+        fairLock.lock();
+
+        try {
+            // 在获取锁的过程中，可能有其他请求将数据放入缓存中，需要再次确认缓冲中有没有
+            json = this.redisTemplate.opsForValue().get(KEY_PREFIX + pid);
+            if (StringUtils.isNotBlank(json)) {
+                return JSON.parseArray(json, CategoryEntity.class);
+            }
+
+            // 2.如果缓存没有命中，调用远程接口获取数据，放入缓存
+            ResponseVo<List<CategoryEntity>> listResponseVo = this.gmallPmsClient.queryCategoriesWithSubsByPid(pid);
+            List<CategoryEntity> categoriesEntityList = listResponseVo.getData();
+            if (!CollectionUtils.isEmpty(categoriesEntityList)) {
+                // 为了防止缓存雪崩，给缓存时间添加随机值
+                this.redisTemplate.opsForValue().set(KEY_PREFIX + pid, JSON.toJSONString(categoriesEntityList), 90 + new Random().nextInt(10), TimeUnit.DAYS);
+            } else {
+                // 为了防止缓存穿透，即使数据为null也进行缓存
+                this.redisTemplate.opsForValue().set(KEY_PREFIX + pid, JSON.toJSONString(categoriesEntityList), 5, TimeUnit.MINUTES);
+            }
+            return categoriesEntityList;
+        } finally {
+            // 解锁
+            fairLock.unlock();
         }
-        return categoriesEntityList;
     }
 
     /**
@@ -482,6 +521,32 @@ public class IndexServiceImpl implements IndexService {
                 // 释放锁
                 this.distributedLock.unLock(lockName, uuid);
             }
+        }
+    }
+
+    /**
+     * Redisson分布式锁
+     *      redisson的加锁、解锁、自动续期几乎跟DistributedLocK中的实现思路一致
+     *
+     * @return
+     */
+    @Override
+    public void testRedissonLock() {
+        // 加锁
+        RLock lock = this.redissonClient.getLock("lock");
+        lock.lock();
+
+        try {
+            String num = this.redisTemplate.opsForValue().get("num");
+            if (StringUtils.isBlank(num)) {
+                this.redisTemplate.opsForValue().set("num", "1");
+                return;
+            }
+            int value = Integer.parseInt(num);
+            this.redisTemplate.opsForValue().set("num", String.valueOf(++value));
+        } finally {
+            // 解锁
+            lock.unlock();
         }
     }
 

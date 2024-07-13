@@ -131,4 +131,14 @@ public class IndexController {
         this.indexService.testDistributedLock6();
         return ResponseVo.ok(null);
     }
+
+    /**
+     * Redisson分布式锁
+     *
+     * @return
+     */
+    public ResponseVo<Object> testRedissonLock() {
+        this.indexService.testRedissonLock();
+        return ResponseVo.ok(null);
+    }
 }
