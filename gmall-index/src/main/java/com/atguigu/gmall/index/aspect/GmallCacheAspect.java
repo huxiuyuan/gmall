@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.redisson.api.RBloomFilter;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class GmallCacheAspect {
 
     @Autowired
     private RedissonClient redissonClient;
+
+    @Autowired
+    private RBloomFilter<String> bloomFilter;
 
     /**
      * 环绕通知
@@ -60,40 +64,49 @@ public class GmallCacheAspect {
         // 拼接参数列表
         String argsJoin = StringUtils.join(joinPoint.getArgs(), ",");
 
-        // 1.先查询缓存，如果缓存命中则直接返回
         // 拼接缓存的key
         String key = gmallCache.prefix() + argsJoin;
+
+        // 拼接分布式锁的key
+        String lock = gmallCache.lock() + argsJoin;
+
+        // 1.为了防止缓存穿透，使用布隆过滤器判断数据是否存在
+        boolean contains = this.bloomFilter.contains(key);
+        if (!contains) {
+            return null;
+        }
+
+        // 2.先查询缓存，如果缓存命中则直接返回
         String json = this.redisTemplate.opsForValue().get(key);
         if (StringUtils.isNotBlank(json)) {
             return JSON.parseObject(json, method.getReturnType());
         }
 
-        // 2.添加分布式锁，防止缓存击穿
-        // 拼接分布式锁的key
-        String lock = gmallCache.lock() + argsJoin;
+        // 3.为了防止缓存击穿，添加分布式锁
         RLock fairLock = this.redissonClient.getFairLock(lock);
         fairLock.lock();
         Object proceed;
 
         try {
-            // 3.再次查询缓存，因为获取锁的过程中，可能有其他请求将数据放入缓存中
+            // 4.再次查询缓存，因为获取锁的过程中，可能有其他请求将数据放入缓存中
             json = this.redisTemplate.opsForValue().get(key);
             if (StringUtils.isNotBlank(json)) {
                 return JSON.parseObject(json, method.getReturnType());
             }
 
-            // 4.执行目标方法
+            // 5.执行目标方法
             proceed = joinPoint.proceed(joinPoint.getArgs());
 
-            // 5.将目标执行执行结果放入缓存(缓存雪崩)
-            // 根据过期时间+过期时间随机值生成一个随机的过期时间
-            int timeout = gmallCache.timeout() + new Random().nextInt(gmallCache.random());
-            this.redisTemplate.opsForValue().set(key, JSON.toJSONString(proceed), timeout, TimeUnit.MINUTES);
+            // 6.将目标执行执行结果放入缓存(缓存雪崩)
+            if (proceed != null) {
+                // 根据过期时间+过期时间随机值生成一个随机的过期时间
+                int timeout = gmallCache.timeout() + new Random().nextInt(gmallCache.random());
+                this.redisTemplate.opsForValue().set(key, JSON.toJSONString(proceed), timeout, TimeUnit.MINUTES);
+            }
         } finally {
-            // 6.释放分布式锁
+            // 7.释放分布式锁
             fairLock.unlock();
         }
-
         return proceed;
     }
 
