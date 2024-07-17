@@ -3,6 +3,7 @@ package com.atguigu.gmall.pms.service;
 import com.atguigu.gmall.common.bean.PageParamVo;
 import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.pms.entity.SkuAttrValueEntity;
+import com.atguigu.gmall.pms.vo.SaleAttrValueVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -26,5 +27,29 @@ public interface SkuAttrValueService extends IService<SkuAttrValueEntity> {
      * @return List<SkuAttrValueEntity>
      */
     List<SkuAttrValueEntity> querySearchAttrValueByCidAndSkuId(Long cid, Long skuId);
+
+    /**
+     * 根据spuId查询spu下所有sku的销售属性
+     *
+     * @param spuId
+     * @return spu下所有sku的销售属性
+     */
+    List<SaleAttrValueVo> querySkuAttrValuesBySpuId(Long spuId);
+
+    /**
+     * 根据skuId查询sku的所有销售属性
+     *
+     * @param skuId
+     * @return sku的所有销售属性
+     */
+    List<SkuAttrValueEntity> querySkuAttrValuesBySkuId(Long skuId);
+
+    /**
+     * 根据spuId查询spu下所有sku跟销售属性的映射关系
+     *
+     * @param spuId
+     * @return spu下所有sku跟销售属性的映射关系
+     */
+    String querySkuAttrValueMappingBySpuId(Long spuId);
 }
 

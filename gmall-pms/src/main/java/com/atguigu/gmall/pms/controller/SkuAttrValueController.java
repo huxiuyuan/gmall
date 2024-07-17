@@ -5,6 +5,7 @@ import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.pms.entity.SkuAttrValueEntity;
 import com.atguigu.gmall.pms.service.SkuAttrValueService;
+import com.atguigu.gmall.pms.vo.SaleAttrValueVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,45 @@ public class SkuAttrValueController {
 
     @Autowired
     private SkuAttrValueService skuAttrValueService;
+
+    /**
+     * 根据spuId查询spu下所有sku跟销售属性的映射关系
+     *
+     * @param spuId
+     * @return spu下所有sku跟销售属性的映射关系
+     */
+    @GetMapping("/querySkuAttrValueMappingBySpuId/{spuId}")
+    @ApiOperation("根据spuId查询spu下所有sku跟销售属性的映射关系")
+    public ResponseVo<String> querySkuAttrValueMappingBySpuId(@PathVariable("spuId") Long spuId) {
+        String json = this.skuAttrValueService.querySkuAttrValueMappingBySpuId(spuId);
+        return ResponseVo.ok(json);
+    }
+
+    /**
+     * 根据skuId查询sku的所有销售属性
+     *
+     * @param skuId
+     * @return sku的所有销售属性
+     */
+    @GetMapping("/querySkuAttrValuesBySkuId/{skuId}")
+    @ApiOperation("根据skuId查询sku的所有销售属性")
+    public ResponseVo<List<SkuAttrValueEntity>> querySkuAttrValuesBySkuId(@PathVariable("skuId") Long skuId) {
+        List<SkuAttrValueEntity> skuAttrValueEntities = this.skuAttrValueService.querySkuAttrValuesBySkuId(skuId);
+        return ResponseVo.ok(skuAttrValueEntities);
+    }
+
+    /**
+     * 根据spuId查询spu下所有sku的销售属性
+     *
+     * @param spuId
+     * @return spu下所有sku的销售属性
+     */
+    @GetMapping("/querySkuAttrValuesBySpuId/{spuId}")
+    @ApiOperation("根据spuId查询商品详情页所需销售属性组")
+    public ResponseVo<List<SaleAttrValueVo>> querySkuAttrValuesBySpuId(@PathVariable("spuId") Long spuId) {
+        List<SaleAttrValueVo> saleAttrValueVos = this.skuAttrValueService.querySkuAttrValuesBySpuId(spuId);
+        return ResponseVo.ok(saleAttrValueVos);
+    }
 
     /**
      * 数据导入第六步：根据 cid 和 spuId 查询销售类型的检索属性及值

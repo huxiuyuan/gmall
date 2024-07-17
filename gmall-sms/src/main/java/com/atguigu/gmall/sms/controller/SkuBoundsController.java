@@ -5,6 +5,7 @@ import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.sms.entity.SkuBoundsEntity;
 import com.atguigu.gmall.sms.service.SkuBoundsService;
+import com.atguigu.gmall.sms.vo.ItemSaleVo;
 import com.atguigu.gmall.sms.vo.SkuSalesVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,6 +30,19 @@ public class SkuBoundsController {
     private SkuBoundsService skuBoundsService;
 
     /**
+     * 根据skuId查询营销信息
+     *
+     * @param skuId
+     * @return 营销信息
+     */
+    @GetMapping("/querySalesBySkuId/{skuId}")
+    @ApiOperation("根据skuId查询营销信息")
+    public ResponseVo<List<ItemSaleVo>> querySalesBySkuId(@PathVariable("skuId") Long skuId) {
+        List<ItemSaleVo> itemSaleVos = this.skuBoundsService.querySalesBySkuId(skuId);
+        return ResponseVo.ok(itemSaleVos);
+    }
+
+    /**
      * 保存sku营销信息
      *
      * @param skuSalesVo sku营销信息
@@ -46,7 +60,7 @@ public class SkuBoundsController {
      */
     @GetMapping
     @ApiOperation("分页查询")
-    public ResponseVo<PageResultVo> querySkuBoundsByPage(PageParamVo paramVo){
+    public ResponseVo<PageResultVo> querySkuBoundsByPage(PageParamVo paramVo) {
         PageResultVo pageResultVo = skuBoundsService.queryPage(paramVo);
 
         return ResponseVo.ok(pageResultVo);
@@ -58,8 +72,8 @@ public class SkuBoundsController {
      */
     @GetMapping("{id}")
     @ApiOperation("详情查询")
-    public ResponseVo<SkuBoundsEntity> querySkuBoundsById(@PathVariable("id") Long id){
-		SkuBoundsEntity skuBounds = skuBoundsService.getById(id);
+    public ResponseVo<SkuBoundsEntity> querySkuBoundsById(@PathVariable("id") Long id) {
+        SkuBoundsEntity skuBounds = skuBoundsService.getById(id);
 
         return ResponseVo.ok(skuBounds);
     }
@@ -69,8 +83,8 @@ public class SkuBoundsController {
      */
     @PostMapping
     @ApiOperation("保存")
-    public ResponseVo<Object> save(@RequestBody SkuBoundsEntity skuBounds){
-		skuBoundsService.save(skuBounds);
+    public ResponseVo<Object> save(@RequestBody SkuBoundsEntity skuBounds) {
+        skuBoundsService.save(skuBounds);
 
         return ResponseVo.ok();
     }
@@ -80,8 +94,8 @@ public class SkuBoundsController {
      */
     @PostMapping("/update")
     @ApiOperation("修改")
-    public ResponseVo update(@RequestBody SkuBoundsEntity skuBounds){
-		skuBoundsService.updateById(skuBounds);
+    public ResponseVo update(@RequestBody SkuBoundsEntity skuBounds) {
+        skuBoundsService.updateById(skuBounds);
 
         return ResponseVo.ok();
     }
@@ -91,8 +105,8 @@ public class SkuBoundsController {
      */
     @PostMapping("/delete")
     @ApiOperation("删除")
-    public ResponseVo delete(@RequestBody List<Long> ids){
-		skuBoundsService.removeByIds(ids);
+    public ResponseVo delete(@RequestBody List<Long> ids) {
+        skuBoundsService.removeByIds(ids);
 
         return ResponseVo.ok();
     }

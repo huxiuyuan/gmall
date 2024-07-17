@@ -33,5 +33,13 @@ public interface CategoryService extends IService<CategoryEntity> {
      * @return 二、三级分类
      */
     List<CategoryEntity> queryCategoriesWithSubsByPid(Long pid);
+
+    /**
+     * 根据三级分类id查询一二三级分类
+     *
+     * @param cid3 三级分类id
+     * @return 一二三级分类
+     */
+    List<CategoryEntity> queryLvl123CategoriesByCid3(Long cid3);
 }
 

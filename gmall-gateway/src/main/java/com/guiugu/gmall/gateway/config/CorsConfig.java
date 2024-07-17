@@ -23,6 +23,7 @@ public class CorsConfig {
         configuration.addAllowedOrigin("http://manager.gmall.com");
         configuration.addAllowedOrigin("http://www.gmall.com");
         configuration.addAllowedOrigin("http://gmall.com");
+        configuration.addAllowedOrigin("http://item.gmall.com");
         configuration.addAllowedOrigin("http://localhost:1000");
         // 是否允许携带cookie
         configuration.setAllowCredentials(true);

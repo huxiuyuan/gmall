@@ -5,6 +5,7 @@ import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.pms.entity.AttrGroupEntity;
 import com.atguigu.gmall.pms.service.AttrGroupService;
+import com.atguigu.gmall.pms.vo.ItemGroupVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,24 @@ public class AttrGroupController {
 
     @Autowired
     private AttrGroupService attrGroupService;
+
+    /**
+     * 根据cid和spuId及skuId查询分组及组下的规格参数和值
+     *
+     * @param cid
+     * @param skuId
+     * @param spuId
+     * @return 分组及组下的规格参数和值
+     */
+    @GetMapping("/attr/value/category/{cid}")
+    public ResponseVo<List<ItemGroupVo>> queryGroupWithAttrValuesByCidAndSkuIdAndSpuId(
+            @PathVariable("cid") Long cid,
+            @RequestParam("skuId") Long skuId,
+            @RequestParam("spuId") Long spuId
+    ) {
+        List<ItemGroupVo> itemGroupVos = this.attrGroupService.queryGroupWithAttrValuesByCidAndSkuIdAndSpuId(cid, skuId, spuId);
+        return ResponseVo.ok(itemGroupVos);
+    }
 
     /**
      * 查询分类下的分组和分组下的具体属性

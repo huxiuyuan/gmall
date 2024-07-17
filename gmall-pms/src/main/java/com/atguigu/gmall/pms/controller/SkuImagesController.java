@@ -28,6 +28,19 @@ public class SkuImagesController {
     private SkuImagesService skuImagesService;
 
     /**
+     * 根据skuId查询sku图片列表
+     *
+     * @param skuId
+     * @return sku图片列表
+     */
+    @GetMapping("/queryBySkuId/{skuId}")
+    @ApiOperation("根据skuId查询sku图片列表")
+    public ResponseVo<List<SkuImagesEntity>> queryImagesBySkuId(@PathVariable("skuId") Long skuId) {
+        List<SkuImagesEntity> skuImagesEntities = this.skuImagesService.queryImagesBySkuId(skuId);
+        return ResponseVo.ok(skuImagesEntities);
+    }
+
+    /**
      * 列表
      */
     @GetMapping
