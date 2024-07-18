@@ -34,4 +34,14 @@ spring:
 feign:
   sentinel:
     enabled: true
+#线程池相关配置
+threadPool:
+  #核心线程数
+  corePoolSize: 100
+  #最大线程数
+  maximumPoolSize: 200
+  #线程空闲时存活时间
+  keepAliveTime: 60
+  #阻塞队列大小
+  blockingQueueSize: 500
 
