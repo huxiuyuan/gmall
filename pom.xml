@@ -17,6 +17,7 @@
         <module>gmall-admin</module>
         <module>gmall-common</module>
         <module>gmall-sms-interface</module>
+        <module>gmall-ums-interface</module>
     </modules>
     <properties>
         <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
