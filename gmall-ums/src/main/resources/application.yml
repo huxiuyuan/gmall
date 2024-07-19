@@ -24,7 +24,7 @@ spring:
     password: 123456
   redis:
     host: 192.168.0.101
-    port: 6379
+    password: 123456
 feign:
   sentinel:
     enabled: true
