@@ -9,13 +9,13 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>gmall-ums</artifactId>
+    <artifactId>gmall-auth</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>gmall-ums</name>
-    <description>谷粒商城用户管理系统</description>
+    <name>gmall-auth</name>
+    <description>谷粒商城授权中心</description>
 
     <dependencies>
-        <!--common 工程-->
+        <!-- common工程 -->
         <dependency>
             <groupId>com.atguigu</groupId>
             <artifactId>gmall-common</artifactId>
@@ -27,26 +27,15 @@
             <artifactId>gmall-ums-interface</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        <!--web 启动器-->
+        <!-- web启动器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!--mybatis plus 启动器-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-        <!--MySQL驱动-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <!--redis 启动器-->
+        <!-- thymeleaf启动器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <!-- nacos注册中心 -->
         <dependency>
@@ -58,11 +47,6 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
-        <!-- openfeign启动器 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
         <!-- sentinel -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -72,6 +56,11 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-zipkin</artifactId>
+        </dependency>
+        <!-- openfeign启动器 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <!-- spring-boot-test -->
         <dependency>

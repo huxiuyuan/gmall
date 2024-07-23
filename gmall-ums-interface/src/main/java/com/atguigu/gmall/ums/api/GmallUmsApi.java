@@ -1,7 +1,7 @@
-package com.atguigu.ums.api;
+package com.atguigu.gmall.ums.api;
 
 import com.atguigu.gmall.common.bean.ResponseVo;
-import com.atguigu.ums.entity.UserEntity;
+import com.atguigu.gmall.ums.entity.UserEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -9,7 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.atguigu.ums</groupId>
     <artifactId>gmall-ums-interface</artifactId>
 
     <dependencies>

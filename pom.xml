@@ -16,8 +16,20 @@
     <modules>
         <module>gmall-admin</module>
         <module>gmall-common</module>
+        <module>gmall-gateway</module>
+        <module>gmall-auth</module>
+        <module>gmall-index</module>
+        <module>gmall-item</module>
+        <module>gmall-oms</module>
+        <module>gmall-pms</module>
+        <module>gmall-pms-interface</module>
+        <module>gmall-search</module>
+        <module>gmall-sms</module>
         <module>gmall-sms-interface</module>
+        <module>gmall-ums</module>
         <module>gmall-ums-interface</module>
+        <module>gmall-wms</module>
+        <module>gmall-wms-interface</module>
     </modules>
     <properties>
         <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
