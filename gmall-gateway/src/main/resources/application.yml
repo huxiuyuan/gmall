@@ -31,12 +31,16 @@ spring:
           uri: lb://search-service
           predicates:
             - Host=search.gmall.com
+        #同步请求过滤器
         - id: index-route
           uri: lb://index-service
           predicates:
             - Host=gmall.com,www.gmall.com
+          filters:
+            - AddResponseHeader=xxx, yyy
+            - Test
         #专门为异步请求提供
-        - id: index-route
+        - id: index-route2
           uri: lb://index-service
           predicates:
             - Path=/index/**
