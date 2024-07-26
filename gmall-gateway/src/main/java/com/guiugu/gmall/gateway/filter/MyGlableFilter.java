@@ -3,7 +3,6 @@ package com.guiugu.gmall.gateway.filter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -15,7 +14,7 @@ import reactor.core.publisher.Mono;
  * 使用@Order注解或者实现org.springframework.core.Ordered接口都可以指定过滤器优先级
  */
 @Order(1) // 数字越小, 优先级越高
-@Component
+//@Component
 public class MyGlableFilter implements GlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

@@ -194,7 +194,7 @@ public class IndexServiceImpl implements IndexService {
      *
      *      注：为什么不通过[expire key 过期时间(秒)]在加锁成功后给锁添加过期时间
      *              因为在redis中只能保证一条指令的原子性，通过java的setIfAbsent方法和expire方法是依次在redis中执行了两条指令
-     *              并且服务在获取锁之后和设置过期时间之前的可能性也不是不存在
+     *              并且服务在获取锁之后和设置过期时间之前宕机的可能性也不是不存在
      * @return
      */
     @Override

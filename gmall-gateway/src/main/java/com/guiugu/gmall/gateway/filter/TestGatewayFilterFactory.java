@@ -3,13 +3,12 @@ package com.guiugu.gmall.gateway.filter;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
  * @author huXiuYuan
- * @Description：测试局部过滤器
+ * @Description：局部过滤器
  * @date 2024/7/24 21:58
  *
  * 局部过滤器可以实现GatewayFilterFactory接口或者继承AbstractGatewayFilterFactory抽象类
@@ -23,7 +22,7 @@ import reactor.core.publisher.Mono;
  *         - AddResponseHeader=xxx, yyy
  *         - Test
  */
-@Component
+//@Component
 public class TestGatewayFilterFactory extends AbstractGatewayFilterFactory<Object> {
     @Override
     public GatewayFilter apply(Object config) {
